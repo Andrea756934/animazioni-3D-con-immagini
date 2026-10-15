@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Legor 3D Metal Hub – We print your ideas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+  <a class="brand" href="#top">Legor <span>3D Metal Hub</span></a>
+  <nav>
+    <a href="#azienda">L'azienda</a><a href="#stampa3d">La stampa 3D</a><a href="#processo">Il processo</a><a href="#materiali">Materiali</a><a class="cta" href="#contatti">Contattaci</a>
+  </nav>
+</header>
+
+<main id="top">
+<section class="hero">
+  <p class="kicker">Servizi di additive manufacturing per l'industria del lusso</p>
+  <h1>We print your ideas</h1>
+  <p class="lead">Dall'esperienza di Legor nasce il 3D Metal Hub: un centro per sperimentare e produrre componenti in metalli preziosi e non, con la tecnologia 3D Metal Binder Jet.</p>
+  <a class="btn" href="#processo">Guarda come nasce un anello</a>
+</section>
+
+<section id="azienda" class="wrap two">
+  <div><h2>Legor, la scienza dei metalli preziosi</h2></div>
+  <div>
+    <p>Fondata in Italia nel 1979 e con sede a Vicenza, Legor produce leghe, polveri e soluzioni galvaniche per i settori della gioielleria e della moda. Ogni anno consolida un percorso fatto di ricerca e attenzione alla sostenibilità, che parte dall'uso di materiali riciclati.</p>
+    <p>Il 3D Metal Hub, a Bressanvido, è il centro di eccellenza dedicato all'additive manufacturing per il lusso. Legor è stata la prima azienda a portare la tecnologia Binder Jet nel mondo dell'oreficeria e degli accessori fashion, in collaborazione con HP e il suo sistema Metal Jet.</p>
+  </div>
+</section>
+
+<section id="stampa3d" class="wrap two">
+  <div><h2>Cos'è la stampa 3D dei metalli</h2><p>Un oggetto si costruisce a strati, partendo da un modello digitale e da una polvere metallica finissima. È un'alternativa alla microfusione classica: non servono cere o resine da bruciare, né gesso.</p></div>
+  <ul class="list">
+    <li><b>Nessuno stampo.</b> Il disegno si modifica quando serve.</li>
+    <li><b>Campioni rapidi.</b> Si passa dal file al pezzo in pochi giorni.</li>
+    <li><b>Più pezzi in un ciclo.</b> Anche diversi tra loro.</li>
+    <li><b>Zero scarti.</b> La polvere avanzata si riutilizza.</li>
+    <li><b>Catene e parti cave.</b> Senza saldature.</li>
+    <li><b>Nessun supporto</b> durante la stampa.</li>
+  </ul>
+</section>
+
+<section id="processo" class="track">
+  <div class="stage">
+    <canvas id="c" role="img" aria-label="Polvere metallica che si trasforma in un anello mentre si scorre la pagina"></canvas>
+    <div class="panel"><h2>Si parte da una polvere.</h2><p>Granelli di metallo tra 5 e 25 micron: più fini di un capello. Scorri per vederli diventare un gioiello.</p></div>
+    <div class="panel"><h2>Stampa</h2><p>Un rullo stende uno strato di polvere e le testine applicano il legante solo dove serve, seguendo le sezioni del modello. Lo strato si ripete fino all'altezza finale.</p></div>
+    <div class="panel"><h2>Curing</h2><p>A circa 150 °C il legante si attiva e nascono gli oggetti "verdi": ancora fragili, immersi nel letto di polvere. Poi vengono liberati e puliti.</p></div>
+    <div class="panel"><h2>Sinterizzazione</h2><p>Nel forno il legante evapora, le particelle si fondono tra loro e il pezzo si ritira. Il raffreddamento è controllato per evitare tensioni e cricche.</p></div>
+    <div class="panel"><h2>Il gioiello è pronto.</h2><p>Il materiale standard è l'acciaio inox AISI 316L. Prova gli altri metalli su cui lavora Legor.</p><div class="chips" id="chips"></div></div>
+    <div class="dots" id="dots"></div>
+  </div>
+</section>
+
+<section id="processo1" class="track">
+  <div class="stage">
+    <canvas id="anelli" role="img" aria-label="Polvere metallica che si trasforma in un anello mentre si scorre la pagina"></canvas>
+    <div class="panel"><h2>Si parte da una polvere.</h2><p>Granelli di metallo tra 5 e 25 micron: più fini di un capello. Scorri per vederli diventare un gioiello.</p></div>
+    <div class="panel"><h2>Stampa</h2><p>Un rullo stende uno strato di polvere e le testine applicano il legante solo dove serve, seguendo le sezioni del modello. Lo strato si ripete fino all'altezza finale.</p></div>
+    <div class="panel"><h2>Curing</h2><p>A circa 150 °C il legante si attiva e nascono gli oggetti "verdi": ancora fragili, immersi nel letto di polvere. Poi vengono liberati e puliti.</p></div>
+    <div class="panel"><h2>Sinterizzazione</h2><p>Nel forno il legante evapora, le particelle si fondono tra loro e il pezzo si ritira. Il raffreddamento è controllato per evitare tensioni e cricche.</p></div>
+    <div class="panel"><h2>Il gioiello è pronto.</h2><p>Il materiale standard è l'acciaio inox AISI 316L. Prova gli altri metalli su cui lavora Legor.</p><div class="chips" id="chips1"></div></div>
+    <div class="dots" id="dots1"></div>
+  </div>
+</section>
+
+<section id="processo2" class="track materials-track">
+        <div class="stage materials-stage">
+            <canvas
+                id="anelli1"
+                role="img"
+                aria-label="Anelli in diversi materiali che si espandono nello spazio durante lo scroll">
+            </canvas>
+        </div>
+</section>
+
+<section id="layer-build" class="track layer-track">
+
+    <div class="stage layer-stage">
+
+        <canvas
+            id="layerCanvas"
+            role="img"
+            aria-label="Anello costruito strato dopo strato tramite additive manufacturing">
+        </canvas>
+
+        <div class="layer-copy">
+
+            <p class="kicker">
+                Layer by layer
+            </p>
+
+            <h2>
+                Built one layer<br>
+                at a time.
+            </h2>
+
+            <p>
+                Nel Binder Jetting ogni componente nasce
+                attraverso la deposizione progressiva di
+                sottilissimi strati di materiale.
+            </p>
+
+        </div>
+
+        <div class="layer-counter">
+            <span id="layerCurrent">000</span>
+            <span class="layer-divider">/</span>
+            <span>200 layers</span>
+        </div>
+
+        <div class="layer-scroll-hint">
+            Scroll to build
+        </div>
+
+    </div>
+
+</section>
+
+<section id="bag-material-orbit" class="bag-material-orbit-track">
+
+    <div class="bag-material-orbit-stage">
+
+        <canvas
+            id="bagMaterialOrbitCanvas"
+            role="img"
+            aria-label="Pendente circondato da diversi materiali metallici selezionabili">
+        </canvas>
+
+
+        <div class="bag-material-orbit-copy">
+
+            <p class="kicker">
+                Material exploration
+            </p>
+
+            <h2>
+                One component.<br>
+                Different metals.
+            </h2>
+
+            <p>
+                Seleziona un materiale in orbita
+                e osserva come cambia la superficie
+                del pendente.
+            </p>
+
+        </div>
+
+
+        <div class="bag-material-orbit-status">
+
+            <span>
+                MATERIAL
+            </span>
+
+            <strong id="bagSelectedMaterial">
+                Platinum
+            </strong>
+
+            <small>
+                SELECT TO CHANGE
+            </small>
+
+        </div>
+
+
+        <div class="bag-material-orbit-hint">
+            Select a material
+        </div>
+
+    </div>
+
+</section>
+
+<section id="lattice-pendant" class="lattice-pendant-track">
+
+    <div class="lattice-pendant-stage">
+
+        <canvas
+            id="latticePendantCanvas"
+            role="img"
+            aria-label="Polvere metallica che si trasforma in un pendente con struttura lattice">
+        </canvas>
+
+
+        <div class="lattice-pendant-story">
+
+            <span
+                id="latticePendantNumber"
+                class="lattice-pendant-number">
+                01
+            </span>
+
+            <p
+                id="latticePendantKicker"
+                class="kicker">
+                Metal powder
+            </p>
+
+            <h2 id="latticePendantTitle">
+                It starts<br>
+                with matter.
+            </h2>
+
+            <p id="latticePendantText">
+                La polvere metallica rappresenta il punto
+                di partenza per una geometria leggera,
+                aperta e strutturalmente sofisticata.
+            </p>
+
+        </div>
+
+
+        <div class="lattice-pendant-dots">
+            <i class="is-active"></i>
+            <i></i>
+            <i></i>
+            <i></i>
+        </div>
+
+
+        <div class="lattice-pendant-status">
+
+            <span>
+                PROCESS
+            </span>
+
+            <strong id="latticePendantPhase">
+                POWDER
+            </strong>
+
+            <small id="latticePendantPercent">
+                00%
+            </small>
+
+        </div>
+
+
+        <div class="lattice-pendant-hint">
+            Scroll to manufacture
+        </div>
+
+    </div>
+
+</section>
+
+<section id="pendant-circle" class="pc-track">
+
+    <div class="pc-stage">
+
+        <canvas
+            id="pcCanvas"
+            role="img"
+            aria-label="Un pendente al centro che genera otto copie disposte in cerchio">
+        </canvas>
+
+        <div class="pc-copy">
+
+            <p class="kicker">Produzione in serie</p>
+
+            <h2>
+                Un pendente,<br>
+                moltiplicato.
+            </h2>
+
+        </div>
+
+        <div class="pc-meta">
+            <span id="pcCount">01 / 09</span>
+            <span class="pc-hint">Scorri per generare le copie</span>
+        </div>
+
+    </div>
+
+</section>
+
+<section id="pendant-interactive" class="pendant-interactive"
+>
+
+    <div class="pendant-interactive-copy">
+
+        <p class="kicker">
+            Interactive object
+        </p>
+
+        <h2>
+            Move around<br>
+            the object.
+        </h2>
+
+        <p>
+            Muovi il mouse per osservare il pendente
+            da diverse angolazioni.
+        </p>
+
+    </div>
+
+
+    <div
+        id="pendantInteractiveStage"
+        class="pendant-interactive-stage"
+    >
+
+        <div class="pendant-orbit-circle"></div>
+
+
+        <div class="pendant-image-wrap">
+
+            <img
+                id="pendantInteractiveImage"
+                src="immagini/pendente-platino.png"
+                alt="Pendente in metallo"
+                draggable="false"
+            >
+
+        </div>
+
+    </div>
+
+
+    <div class="pendant-interactive-data">
+
+        <div>
+
+            <span>
+                ROTATION X
+            </span>
+
+            <strong id="pendantRotationX">
+                0°
+            </strong>
+
+        </div>
+
+
+        <div>
+
+            <span>
+                ROTATION Y
+            </span>
+
+            <strong id="pendantRotationY">
+                0°
+            </strong>
+
+        </div>
+
+    </div>
+
+
+    <div class="pendant-interactive-hint">
+        Move your mouse
+    </div>
+
+</section>
+
+<section id="surface-finishing" class="surface-finishing"
+>
+
+    <div class="surface-finishing-copy">
+
+        <p class="kicker">
+            Surface finishing
+        </p>
+
+        <h2>
+            From raw metal<br>
+            to final finish.
+        </h2>
+
+        <p>
+            Trascina sull'oggetto per passare
+            dalla superficie appena prodotta
+            alla finitura lucidata.
+        </p>
+
+    </div>
+
+
+    <div
+        id="surfaceFinishingStage"
+        class="surface-finishing-stage"
+        style="--reveal: 50%;"
+    >
+
+        <!-- =========================================
+             RAW / AS PRINTED
+        ========================================== -->
+
+        <img
+            class="surface-finishing-image surface-finishing-raw"
+            src="immagini/pendente2.png"
+            alt=""
+            draggable="false"
+        >
+
+
+        <!-- =========================================
+             POLISHED
+        ========================================== -->
+
+        <div class="surface-finishing-polished-wrap">
+
+            <img
+                class="surface-finishing-image surface-finishing-polished"
+                src="immagini/pendente2.png"
+                alt="Pendente metallico con confronto tra superficie grezza e lucidata"
+                draggable="false"
+            >
+
+        </div>
+
+
+        <!-- =========================================
+             LIGHT / REFLECTION
+        ========================================== -->
+
+        <div class="surface-finishing-light"></div>
+
+
+        <!-- =========================================
+             DIVIDER
+        ========================================== -->
+
+        <div class="surface-finishing-divider">
+
+            <span></span>
+
+        </div>
+
+
+        <!-- =========================================
+             LABELS
+        ========================================== -->
+
+        <div class="surface-finishing-label surface-finishing-label-left">
+
+            <span>
+                01
+            </span>
+
+            <strong>
+                AS PRINTED
+            </strong>
+
+        </div>
+
+
+        <div class="surface-finishing-label surface-finishing-label-right">
+
+            <span>
+                02
+            </span>
+
+            <strong>
+                POLISHED
+            </strong>
+
+        </div>
+
+    </div>
+
+
+    <div class="surface-finishing-status">
+
+        <span>
+            FINISH
+        </span>
+
+        <strong id="surfaceFinishingStatus">
+            50%
+        </strong>
+
+    </div>
+
+
+    <div class="surface-finishing-hint">
+        Click + drag to finish
+    </div>
+
+</section>
+
+<section id="contatti" class="wrap contact">
+  <h2>Richiedi informazioni sul 3D Metal Hub</h2>
+  <p>Racconta il tuo progetto: ti risponderemo con tempi e materiali possibili. (Qui va inserito il modulo o l'indirizzo email reale.)</p>
+  <a class="btn" href="mailto:">Scrivici</a>
+</section>
+</main>
+<footer>Legor Group · Vicenza, Italia · Sito dimostrativo ispirato a legor.com/3d-metal-hub</footer>
+<script src="script.js"></script>
+</body>
+</html>

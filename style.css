@@ -1,0 +1,2901 @@
+/* =====================================================
+   ROOT / VARIABILI
+===================================================== */
+
+:root {
+    --bg: #15181d;
+    --fg: #ecebe7;
+    --mut: #9a9fa7;
+    --line: #2b3037;
+    --badge-nav: #d8d7d3;
+
+    box-sizing: border-box;
+}
+
+
+/* Light mode */
+
+@media (prefers-color-scheme: light) {
+
+    :root {
+        --bg: #eeece8;
+        --fg: #1a1d22;
+        --mut: #5f646c;
+        --line: #cfccc6;
+    }
+
+}
+
+
+/* =====================================================
+   RESET
+===================================================== */
+
+* {
+    box-sizing: border-box;
+}
+
+
+html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 4rem;
+}
+
+
+body {
+    margin: 0;
+
+    background: var(--bg);
+    color: var(--fg);
+
+    font:
+        300
+        1.05rem / 1.7
+        Jost,
+        system-ui,
+        sans-serif;
+}
+
+
+a {
+    color: inherit;
+}
+
+
+/* =====================================================
+   HEADER
+===================================================== */
+
+header {
+    background: var(--badge-nav);
+}
+
+
+header {
+    position: fixed;
+
+    top: 0;
+    left: 0;
+    right: 0;
+
+    z-index: 5;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding:
+        calc(
+            0.9rem +
+            env(safe-area-inset-top, 0px)
+        )
+        5vw
+        0.9rem;
+
+    background:
+        color-mix(
+            in srgb,
+            var(--badge-nav) 88%,
+            black
+        );
+
+    backdrop-filter: blur(8px);
+}
+
+
+/* =====================================================
+   BRAND
+===================================================== */
+
+.brand {
+    text-decoration: none;
+
+    font-weight: 500;
+
+    letter-spacing: 0.03em;
+}
+
+
+.brand span {
+    font-weight: 300;
+
+    color: var(--mut);
+}
+
+
+/* =====================================================
+   NAVIGATION
+===================================================== */
+
+nav {
+    display: flex;
+    align-items: center;
+
+    gap: 1.6rem;
+
+    font-size: 0.95rem;
+}
+
+
+nav a {
+    text-decoration: none;
+
+    color: var(--mut);
+}
+
+
+nav a:hover {
+    color: var(--fg);
+}
+
+
+nav .cta {
+    color: var(--fg);
+
+    border:
+        1px solid
+        var(--line);
+
+    border-radius: 2rem;
+
+    padding:
+        0.3rem
+        1rem;
+}
+
+
+/* Mobile navigation */
+
+@media (max-width: 820px) {
+
+    nav a:not(.cta) {
+        display: none;
+    }
+
+}
+
+
+/* =====================================================
+   HERO
+===================================================== */
+
+.hero {
+    min-height: 100svh;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    padding:
+        7rem
+        5vw
+        4rem;
+
+    max-width: 68rem;
+}
+
+
+.kicker {
+    color: var(--mut);
+
+    margin:
+        0
+        0
+        1rem;
+}
+
+
+/* =====================================================
+   TYPOGRAPHY
+===================================================== */
+
+h1,
+h2 {
+    margin:
+        0
+        0
+        1rem;
+
+    font-weight: 300;
+
+    line-height: 1.08;
+
+    letter-spacing: -0.01em;
+}
+
+
+h1 {
+    font-size:
+        clamp(
+            3rem,
+            10vw,
+            7.5rem
+        );
+}
+
+
+h2 {
+    font-size:
+        clamp(
+            1.8rem,
+            4.2vw,
+            3rem
+        );
+}
+
+
+.lead {
+    max-width: 36rem;
+
+    color: var(--mut);
+
+    font-size: 1.2rem;
+}
+
+
+/* =====================================================
+   BUTTONS
+===================================================== */
+
+.btn {
+    align-self: flex-start;
+
+    display: inline-block;
+
+    margin-top: 1.4rem;
+
+    border:
+        1px solid
+        var(--fg);
+
+    border-radius: 3rem;
+
+    padding:
+        0.7rem
+        1.6rem;
+
+    text-decoration: none;
+
+    transition:
+        background 0.3s,
+        color 0.3s;
+}
+
+
+.btn:hover,
+.btn:focus-visible {
+    background: var(--fg);
+    color: var(--bg);
+}
+
+
+/* =====================================================
+   GENERIC CONTENT SECTIONS
+===================================================== */
+
+.wrap {
+    max-width: 76rem;
+
+    margin:
+        0
+        auto;
+
+    padding:
+        12vh
+        5vw;
+
+    border-top:
+        1px solid
+        var(--line);
+}
+
+
+.wrap p {
+    max-width: 36rem;
+
+    margin:
+        0
+        0
+        1rem;
+
+    color: var(--mut);
+}
+
+
+/* =====================================================
+   TWO COLUMN LAYOUT
+===================================================== */
+
+.two {
+    display: grid;
+
+    grid-template-columns: 1fr;
+
+    gap: 2rem;
+}
+
+
+@media (min-width: 820px) {
+
+    .two {
+        grid-template-columns:
+            1fr
+            1fr;
+
+        gap: 6vw;
+    }
+
+}
+
+
+/* =====================================================
+   BENEFITS LIST
+===================================================== */
+
+.list {
+    list-style: none;
+
+    margin: 0;
+    padding: 0;
+
+    display: grid;
+
+    gap: 1rem;
+}
+
+
+.list li {
+    border-left:
+        1px solid
+        var(--line);
+
+    padding-left: 1.2rem;
+
+    color: var(--mut);
+}
+
+
+.list b {
+    color: var(--fg);
+
+    font-weight: 400;
+}
+
+
+/* =====================================================
+   PROCESS SECTION
+===================================================== */
+
+.track {
+    position: relative;
+
+    height: 640vh;
+}
+
+
+.stage {
+    position: sticky;
+
+    top: 0;
+
+    height: 100svh;
+
+    overflow: hidden;
+}
+
+
+/* =====================================================
+   PROCESS CANVAS
+===================================================== */
+
+#c,
+#anelli {
+    position: absolute;
+
+    inset: 0;
+
+    width: 100%;
+    height: 100%;
+}
+
+
+/* =====================================================
+   PROCESS PANELS
+===================================================== */
+
+.panel {
+    position: absolute;
+
+    left: 5vw;
+    right: 5vw;
+    bottom: 9vh;
+
+    max-width: 27rem;
+
+    opacity: 0;
+
+    transform:
+        translateY(14px);
+
+    transition:
+        opacity 0.6s,
+        transform 0.6s;
+
+    pointer-events: none;
+}
+
+
+.panel.on {
+    opacity: 1;
+
+    transform: none;
+
+    pointer-events: auto;
+}
+
+
+.panel p {
+    margin: 0;
+
+    color: var(--mut);
+}
+
+
+/* Desktop panels */
+
+@media (min-width: 820px) {
+
+    .panel {
+        left: 7vw;
+        top: 50%;
+        bottom: auto;
+
+        transform:
+            translateY(
+                calc(-50% + 14px)
+            );
+    }
+
+
+    .panel.on {
+        transform:
+            translateY(-50%);
+    }
+
+}
+
+
+/* =====================================================
+   MATERIAL CHIPS
+===================================================== */
+
+.chips {
+    display: flex;
+    flex-wrap: wrap;
+
+    gap: 0.5rem;
+
+    margin-top: 1.3rem;
+}
+
+
+.chips button {
+    font: inherit;
+
+    font-size: 0.92rem;
+
+    color: var(--fg);
+
+    background: none;
+
+    border:
+        1px solid
+        var(--line);
+
+    border-radius: 2rem;
+
+    padding:
+        0.4rem
+        1rem;
+
+    cursor: pointer;
+}
+
+
+.chips button[aria-pressed="true"] {
+    border-color: var(--fg);
+}
+
+
+.chips button:focus-visible {
+    outline:
+        2px solid
+        var(--fg);
+
+    outline-offset: 2px;
+}
+
+
+/* =====================================================
+   PROCESS DOTS
+===================================================== */
+
+.dots {
+    position: absolute;
+
+    right: 3.5vw;
+    top: 50%;
+
+    transform:
+        translateY(-50%);
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 0.8rem;
+}
+
+
+.dots i {
+    width: 2px;
+    height: 24px;
+
+    background: var(--line);
+
+    transition:
+        height 0.4s,
+        background 0.4s;
+}
+
+
+.dots i.on {
+    height: 40px;
+
+    background: var(--fg);
+}
+
+
+/* =====================================================
+   CONTACT
+===================================================== */
+
+.contact {
+    text-align: left;
+}
+
+
+/* =====================================================
+   FOOTER
+===================================================== */
+
+footer {
+    padding:
+        2rem
+        5vw
+        calc(
+            2rem +
+            env(
+                safe-area-inset-bottom,
+                0px
+            )
+        );
+
+    border-top:
+        1px solid
+        var(--line);
+
+    color: var(--mut);
+
+    font-size: 0.9rem;
+}
+
+
+/* =====================================================
+   MATERIALS EXPLOSION
+===================================================== */
+
+.materials-track {
+    height: 430vh;
+}
+
+
+.materials-stage {
+    position: sticky;
+
+    top: 0;
+
+    height: 100svh;
+
+    overflow: hidden;
+}
+
+
+@media (max-width: 700px) {
+
+    .materials-track {
+        height: 380vh;
+    }
+
+}
+
+
+/* =====================================================
+   LAYER BY LAYER ANIMATION
+===================================================== */
+
+.layer-track {
+    height: 460vh;
+}
+
+
+.layer-stage {
+    position: sticky;
+
+    top: 0;
+
+    height: 100svh;
+
+    overflow: hidden;
+}
+
+
+#layerCanvas {
+    position: absolute;
+
+    inset: 0;
+
+    width: 100%;
+    height: 100%;
+
+    z-index: 1;
+}
+
+
+/* =====================================================
+   COPY
+===================================================== */
+
+.layer-copy {
+    position: absolute;
+
+    top: 50%;
+    left: 7vw;
+
+    z-index: 2;
+
+    width: min(28rem, 36vw);
+
+    transform: translateY(-50%);
+
+    pointer-events: none;
+}
+
+
+.layer-copy h2 {
+    font-size:
+        clamp(
+            2.7rem,
+            5vw,
+            5.5rem
+        );
+
+    margin-bottom: 1.4rem;
+}
+
+
+.layer-copy > p:last-child {
+    max-width: 25rem;
+
+    margin: 0;
+
+    color: var(--mut);
+}
+
+
+/* =====================================================
+   LAYER COUNTER
+===================================================== */
+
+.layer-counter {
+    position: absolute;
+
+    right: 4vw;
+    bottom: 5vh;
+
+    z-index: 2;
+
+    display: flex;
+
+    align-items: baseline;
+
+    gap: 0.5rem;
+
+    font-size: 0.85rem;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.12em;
+
+    color: var(--mut);
+
+    pointer-events: none;
+}
+
+
+#layerCurrent {
+    min-width: 3ch;
+
+    color: var(--fg);
+
+    font-size: 1.7rem;
+
+    font-weight: 400;
+
+    letter-spacing: 0.04em;
+}
+
+
+.layer-divider {
+    color: var(--line);
+}
+
+
+/* =====================================================
+   SCROLL HINT
+===================================================== */
+
+.layer-scroll-hint {
+    position: absolute;
+
+    left: 50%;
+    bottom: 4vh;
+
+    z-index: 2;
+
+    transform: translateX(-50%);
+
+    color: var(--mut);
+
+    font-size: 0.75rem;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.16em;
+
+    pointer-events: none;
+}
+
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media (max-width: 700px) {
+
+    .layer-track {
+        height: 400vh;
+    }
+
+
+    .layer-copy {
+        top: 9vh;
+        left: 6vw;
+        right: 6vw;
+
+        width: auto;
+
+        transform: none;
+    }
+
+
+    .layer-copy h2 {
+        font-size:
+            clamp(
+                2.2rem,
+                11vw,
+                3.5rem
+            );
+
+        margin-bottom: 0.8rem;
+    }
+
+
+    .layer-copy > p:last-child {
+        max-width: 90%;
+
+        font-size: 0.95rem;
+    }
+
+
+    .layer-counter {
+        right: 6vw;
+        bottom: 8vh;
+    }
+
+
+    .layer-scroll-hint {
+        left: 6vw;
+        bottom: 3vh;
+
+        transform: none;
+    }
+
+}
+
+
+/* =====================================================
+   BAG HARDWARE — ORBITING MATERIALS
+===================================================== */
+
+.bag-material-orbit-track {
+    position: relative;
+
+    height: 320vh;
+}
+
+
+.bag-material-orbit-stage {
+    position: sticky;
+
+    top: 0;
+
+    height: 100svh;
+
+    overflow: hidden;
+}
+
+
+#bagMaterialOrbitCanvas {
+    position: absolute;
+
+    inset: 0;
+
+    z-index: 1;
+
+    width: 100%;
+    height: 100%;
+
+    display: block;
+
+    cursor: default;
+}
+
+
+/* =====================================================
+   COPY
+===================================================== */
+
+.bag-material-orbit-copy {
+    position: absolute;
+
+    top: 50%;
+    left: 7vw;
+
+    z-index: 2;
+
+    width: min(28rem, 32vw);
+
+    transform: translateY(-50%);
+
+    pointer-events: none;
+}
+
+
+.bag-material-orbit-copy h2 {
+    margin-bottom: 1.2rem;
+
+    font-size:
+        clamp(
+            2.8rem,
+            5vw,
+            5.5rem
+        );
+}
+
+
+.bag-material-orbit-copy > p:last-child {
+    max-width: 24rem;
+
+    margin: 0;
+
+    color: var(--mut);
+}
+
+
+/* =====================================================
+   STATUS
+===================================================== */
+
+.bag-material-orbit-status {
+    position: absolute;
+
+    top: 12vh;
+    right: 4vw;
+
+    z-index: 2;
+
+    display: flex;
+    flex-direction: column;
+
+    align-items: flex-end;
+
+    gap: 0.18rem;
+
+    pointer-events: none;
+}
+
+
+.bag-material-orbit-status > span {
+    color: var(--mut);
+
+    font-size: 0.62rem;
+
+    letter-spacing: 0.18em;
+}
+
+
+#bagSelectedMaterial {
+    color: var(--fg);
+
+    font-size: 1.4rem;
+
+    font-weight: 300;
+
+    letter-spacing: 0.06em;
+}
+
+
+.bag-material-orbit-status small {
+    margin-top: 0.2rem;
+
+    color: var(--mut);
+
+    font-size: 0.58rem;
+
+    letter-spacing: 0.14em;
+}
+
+
+/* =====================================================
+   HINT
+===================================================== */
+
+.bag-material-orbit-hint {
+    position: absolute;
+
+    left: 50%;
+    bottom: 4vh;
+
+    z-index: 2;
+
+    transform: translateX(-50%);
+
+    color: var(--mut);
+
+    font-size: 0.7rem;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.16em;
+
+    pointer-events: none;
+}
+
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media (max-width: 700px) {
+
+    .bag-material-orbit-track {
+        height: 280vh;
+    }
+
+
+    .bag-material-orbit-copy {
+        top: 8vh;
+
+        left: 6vw;
+        right: 6vw;
+
+        width: auto;
+
+        transform: none;
+    }
+
+
+    .bag-material-orbit-copy h2 {
+        font-size:
+            clamp(
+                2.3rem,
+                11vw,
+                3.8rem
+            );
+    }
+
+
+    .bag-material-orbit-copy > p:last-child {
+        max-width: 88%;
+
+        font-size: 0.94rem;
+    }
+
+
+    .bag-material-orbit-status {
+        top: auto;
+
+        right: 6vw;
+        bottom: 8vh;
+    }
+
+
+    .bag-material-orbit-hint {
+        left: 6vw;
+        bottom: 3vh;
+
+        transform: none;
+    }
+
+}
+
+
+/* =====================================================
+   LATTICE PENDANT
+===================================================== */
+
+.lattice-pendant-track {
+    position: relative;
+
+    height: 640vh;
+}
+
+
+.lattice-pendant-stage {
+    position: sticky;
+
+    top: 0;
+
+    height: 100svh;
+
+    overflow: hidden;
+}
+
+
+#latticePendantCanvas {
+    position: absolute;
+
+    inset: 0;
+
+    z-index: 1;
+
+    width: 100%;
+    height: 100%;
+}
+
+
+/* =====================================================
+   STORY
+===================================================== */
+
+.lattice-pendant-story {
+    position: absolute;
+
+    top: 50%;
+    left: 7vw;
+
+    z-index: 3;
+
+    width: min(29rem, 34vw);
+
+    transform: translateY(-50%);
+
+    pointer-events: none;
+}
+
+
+.lattice-pendant-number {
+    display: block;
+
+    margin-bottom: 1.1rem;
+
+    color: var(--mut);
+
+    font-size: 0.68rem;
+
+    letter-spacing: 0.20em;
+}
+
+
+.lattice-pendant-story .kicker {
+    margin-bottom: 0.7rem;
+}
+
+
+.lattice-pendant-story h2 {
+    margin:
+        0
+        0
+        1.2rem;
+
+    color: var(--fg);
+
+    font-size:
+        clamp(
+            2.8rem,
+            5vw,
+            5.5rem
+        );
+
+    line-height: 0.96;
+
+    font-weight: 300;
+
+    letter-spacing: -0.035em;
+}
+
+
+#latticePendantText {
+    max-width: 24rem;
+
+    margin: 0;
+
+    color: var(--mut);
+
+    line-height: 1.6;
+}
+
+
+/* =====================================================
+   DOTS
+===================================================== */
+
+.lattice-pendant-dots {
+    position: absolute;
+
+    top: 50%;
+    left: 3vw;
+
+    z-index: 3;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 0.7rem;
+
+    transform:
+        translateY(-50%);
+
+    pointer-events: none;
+}
+
+
+.lattice-pendant-dots i {
+    display: block;
+
+    width: 5px;
+    height: 5px;
+
+    border-radius: 50%;
+
+    background: var(--mut);
+
+    opacity: 0.25;
+
+    transform: scale(1);
+
+    transition:
+        opacity 0.25s ease,
+        transform 0.25s ease,
+        background 0.25s ease;
+}
+
+
+.lattice-pendant-dots i.is-active {
+    opacity: 1;
+
+    transform: scale(1.6);
+
+    background: var(--fg);
+}
+
+
+/* =====================================================
+   STATUS
+===================================================== */
+
+.lattice-pendant-status {
+    position: absolute;
+
+    top: 12vh;
+    right: 4vw;
+
+    z-index: 3;
+
+    display: flex;
+    flex-direction: column;
+
+    align-items: flex-end;
+
+    gap: 0.15rem;
+
+    pointer-events: none;
+}
+
+
+.lattice-pendant-status > span {
+    color: var(--mut);
+
+    font-size: 0.62rem;
+
+    letter-spacing: 0.18em;
+}
+
+
+#latticePendantPhase {
+    color: var(--fg);
+
+    font-size: 1.35rem;
+
+    font-weight: 300;
+
+    letter-spacing: 0.08em;
+}
+
+
+#latticePendantPercent {
+    margin-top: 0.25rem;
+
+    color: var(--mut);
+
+    font-size: 0.72rem;
+
+    letter-spacing: 0.12em;
+}
+
+
+/* =====================================================
+   HINT
+===================================================== */
+
+.lattice-pendant-hint {
+    position: absolute;
+
+    left: 50%;
+    bottom: 3vh;
+
+    z-index: 3;
+
+    transform:
+        translateX(-50%);
+
+    color: var(--mut);
+
+    font-size: 0.68rem;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.16em;
+
+    pointer-events: none;
+}
+
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media (max-width: 700px) {
+
+    .lattice-pendant-track {
+        height: 560vh;
+    }
+
+
+    .lattice-pendant-story {
+        top: 8vh;
+
+        left: 6vw;
+        right: 6vw;
+
+        width: auto;
+
+        transform: none;
+    }
+
+
+    .lattice-pendant-story h2 {
+        font-size:
+            clamp(
+                2.35rem,
+                10vw,
+                3.8rem
+            );
+    }
+
+
+    #latticePendantText {
+        max-width: 88%;
+
+        font-size: 0.92rem;
+    }
+
+
+    .lattice-pendant-dots {
+        top: auto;
+
+        left: 6vw;
+        bottom: 18vh;
+
+        flex-direction: row;
+
+        transform: none;
+    }
+
+
+    .lattice-pendant-status {
+        top: auto;
+
+        right: 6vw;
+        bottom: 14vh;
+    }
+
+
+    .lattice-pendant-hint {
+        display: none;
+    }
+
+}
+
+
+/* =====================================================
+   PENDANT CIRCLE
+===================================================== */
+
+.pc-track {
+    position: relative;
+
+    height: 520vh;
+}
+
+
+.pc-stage {
+    position: sticky;
+
+    top: 0;
+
+    height: 100svh;
+
+    overflow: hidden;
+
+    --pc-bg: #edece8;
+    --pc-ink: #1c1f24;
+    --pc-mut: #6f737a;
+
+    background: var(--pc-bg);
+
+    color: var(--pc-ink);
+}
+
+
+#pcCanvas {
+    position: absolute;
+
+    inset: 0;
+
+    z-index: 1;
+
+    width: 100%;
+    height: 100%;
+
+    display: block;
+}
+
+
+.pc-copy {
+    position: absolute;
+
+    top: 6.5rem;
+    left: 6vw;
+
+    z-index: 2;
+
+    width:
+        min(
+            20rem,
+            30vw
+        );
+
+    pointer-events: none;
+}
+
+
+.pc-copy .kicker,
+.pc-hint {
+    color: var(--pc-mut);
+}
+
+
+.pc-copy h2 {
+    margin: 0;
+
+    font-size:
+        clamp(
+            2rem,
+            3.6vw,
+            3.6rem
+        );
+}
+
+
+.pc-meta {
+    position: absolute;
+
+    left: 0;
+    right: 0;
+    bottom: 4vh;
+
+    z-index: 2;
+
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+
+    gap: 0.5rem;
+
+    pointer-events: none;
+}
+
+
+#pcCount {
+    font-size: 1.4rem;
+
+    font-weight: 400;
+
+    letter-spacing: 0.1em;
+}
+
+
+@media (max-width: 700px) {
+
+    .pc-track {
+        height: 460vh;
+    }
+
+
+    .pc-copy {
+        top: 5.5rem;
+
+        left: 6vw;
+        right: 6vw;
+
+        width: auto;
+    }
+
+
+    .pc-copy h2 {
+        font-size:
+            clamp(
+                1.8rem,
+                8vw,
+                2.6rem
+            );
+    }
+
+}
+
+/* =====================================================
+   INTERACTIVE PENDANT
+===================================================== */
+
+.pendant-interactive {
+    position: relative;
+
+    min-height: 100svh;
+
+    overflow: hidden;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    background:
+        var(--bg);
+
+    color:
+        var(--fg);
+}
+
+
+/* =====================================================
+   COPY
+===================================================== */
+
+.pendant-interactive-copy {
+    position: absolute;
+
+    top: 50%;
+    left: 7vw;
+
+    z-index: 3;
+
+    width:
+        min(
+            27rem,
+            30vw
+        );
+
+    transform:
+        translateY(-50%);
+
+    pointer-events:
+        none;
+}
+
+
+.pendant-interactive-copy h2 {
+    margin:
+        0
+        0
+        1.2rem;
+
+    font-size:
+        clamp(
+            2.8rem,
+            5vw,
+            5.5rem
+        );
+
+    line-height:
+        0.95;
+
+    letter-spacing:
+        -0.035em;
+}
+
+
+.pendant-interactive-copy > p:last-child {
+    max-width:
+        23rem;
+
+    margin:
+        0;
+
+    color:
+        var(--mut);
+}
+
+
+/* =====================================================
+   STAGE
+===================================================== */
+
+.pendant-interactive-stage {
+    position: relative;
+
+    width:
+        min(
+            62vw,
+            720px
+        );
+
+    height:
+        min(
+            75vh,
+            760px
+        );
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    perspective:
+        1200px;
+
+    transform-style:
+        preserve-3d;
+
+    cursor:
+        grab;
+}
+
+
+.pendant-interactive-stage:active {
+    cursor:
+        grabbing;
+}
+
+
+/* =====================================================
+   ORBIT CIRCLE
+===================================================== */
+
+.pendant-orbit-circle {
+    position: absolute;
+
+    left: 50%;
+    top: 50%;
+
+    width:
+        min(
+            36rem,
+            80%
+        );
+
+    aspect-ratio:
+        1;
+
+    transform:
+        translate(
+            -50%,
+            -50%
+        );
+
+    border:
+        1px solid
+        rgba(
+            255,
+            255,
+            255,
+            0.07
+        );
+
+    border-radius:
+        50%;
+
+    pointer-events:
+        none;
+}
+
+
+.pendant-orbit-circle::before {
+    content:
+        "";
+
+    position:
+        absolute;
+
+    inset:
+        12%;
+
+    border:
+        1px solid
+        rgba(
+            255,
+            255,
+            255,
+            0.035
+        );
+
+    border-radius:
+        50%;
+}
+
+
+/* =====================================================
+   IMAGE
+===================================================== */
+
+.pendant-image-wrap {
+    position: relative;
+
+    z-index: 2;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    width:
+        100%;
+
+    height:
+        100%;
+
+    transform-style:
+        preserve-3d;
+}
+
+
+#pendantInteractiveImage {
+    display: block;
+
+    width:
+        min(
+            65%,
+            470px
+        );
+
+    max-height:
+        72vh;
+
+    object-fit:
+        contain;
+
+    transform-origin:
+        center center;
+
+    transform-style:
+        preserve-3d;
+
+    will-change:
+        transform;
+
+    filter:
+        drop-shadow(
+            0
+            30px
+            35px
+            rgba(
+                0,
+                0,
+                0,
+                0.35
+            )
+        );
+
+    user-select:
+        none;
+
+    -webkit-user-drag:
+        none;
+
+    pointer-events:
+        none;
+}
+
+
+/* =====================================================
+   DATA
+===================================================== */
+
+.pendant-interactive-data {
+    position: absolute;
+
+    top: 12vh;
+    right: 4vw;
+
+    z-index: 3;
+
+    display: grid;
+
+    gap:
+        0.8rem;
+
+    min-width:
+        8rem;
+
+    pointer-events:
+        none;
+}
+
+
+.pendant-interactive-data > div {
+    display: flex;
+
+    flex-direction: column;
+
+    align-items:
+        flex-end;
+}
+
+
+.pendant-interactive-data span {
+    color:
+        var(--mut);
+
+    font-size:
+        0.58rem;
+
+    letter-spacing:
+        0.16em;
+}
+
+
+.pendant-interactive-data strong {
+    color:
+        var(--fg);
+
+    font-size:
+        1.1rem;
+
+    font-weight:
+        300;
+
+    letter-spacing:
+        0.04em;
+}
+
+
+/* =====================================================
+   HINT
+===================================================== */
+
+.pendant-interactive-hint {
+    position: absolute;
+
+    left: 50%;
+    bottom: 4vh;
+
+    z-index: 3;
+
+    transform:
+        translateX(-50%);
+
+    color:
+        var(--mut);
+
+    font-size:
+        0.7rem;
+
+    text-transform:
+        uppercase;
+
+    letter-spacing:
+        0.16em;
+
+    pointer-events:
+        none;
+}
+
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media (max-width: 700px) {
+
+    .pendant-interactive {
+        min-height:
+            100svh;
+
+        align-items:
+            flex-end;
+    }
+
+
+    .pendant-interactive-copy {
+        top:
+            7rem;
+
+        left:
+            6vw;
+
+        right:
+            6vw;
+
+        width:
+            auto;
+
+        transform:
+            none;
+    }
+
+
+    .pendant-interactive-copy h2 {
+        font-size:
+            clamp(
+                2.3rem,
+                11vw,
+                3.8rem
+            );
+    }
+
+
+    .pendant-interactive-copy > p:last-child {
+        max-width:
+            88%;
+
+        font-size:
+            0.94rem;
+    }
+
+
+    .pendant-interactive-stage {
+    position: relative;
+
+    width:
+        min(
+            62vw,
+            720px
+        );
+
+    height:
+        min(
+            75vh,
+            760px
+        );
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    perspective:
+        1200px;
+
+    transform-style:
+        preserve-3d;
+
+    /* Lo stage non deve sembrare cliccabile */
+    cursor: default;
+}
+
+
+    #pendantInteractiveImage {
+    display: block;
+
+    width:
+        min(
+            65%,
+            470px
+        );
+
+    max-height:
+        72vh;
+
+    object-fit:
+        contain;
+
+    transform-origin:
+        center center;
+
+    transform-style:
+        preserve-3d;
+
+    will-change:
+        transform;
+
+    filter:
+        drop-shadow(
+            0
+            30px
+            35px
+            rgba(
+                0,
+                0,
+                0,
+                0.35
+            )
+        );
+
+    user-select: none;
+    -webkit-user-select: none;
+
+    -webkit-user-drag: none;
+
+    pointer-events: none;
+}
+
+
+#pendantInteractiveImage:active {
+    cursor: grabbing;
+}
+
+
+    .pendant-interactive-data {
+        top:
+            auto;
+
+        right:
+            6vw;
+
+        bottom:
+            9vh;
+    }
+
+
+    .pendant-interactive-hint {
+        left:
+            6vw;
+
+        bottom:
+            4vh;
+
+        transform:
+            none;
+    }
+
+}
+
+/* =====================================================
+   SURFACE FINISHING
+===================================================== */
+
+.surface-finishing {
+    position: relative;
+
+    min-height: 100svh;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    overflow: hidden;
+
+    background:
+        var(--bg);
+
+    color:
+        var(--fg);
+}
+
+
+/* =====================================================
+   COPY
+===================================================== */
+
+.surface-finishing-copy {
+    position: absolute;
+
+    top: 50%;
+    left: 7vw;
+
+    z-index: 5;
+
+    width:
+        min(
+            28rem,
+            31vw
+        );
+
+    transform:
+        translateY(-50%);
+
+    pointer-events:
+        none;
+}
+
+
+.surface-finishing-copy h2 {
+    margin:
+        0
+        0
+        1.4rem;
+
+    font-size:
+        clamp(
+            3rem,
+            5vw,
+            5.8rem
+        );
+
+    line-height:
+        0.92;
+
+    font-weight:
+        300;
+
+    letter-spacing:
+        -0.045em;
+}
+
+
+.surface-finishing-copy > p:last-child {
+    max-width:
+        23rem;
+
+    margin:
+        0;
+
+    color:
+        var(--mut);
+
+    line-height:
+        1.7;
+}
+
+
+/* =====================================================
+   STAGE
+===================================================== */
+
+.surface-finishing-stage {
+    --reveal:
+        50%;
+
+    position: relative;
+
+    width:
+        min(
+            58vw,
+            720px
+        );
+
+    height:
+        min(
+            76vh,
+            760px
+        );
+
+    margin-left:
+        20vw;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    cursor:
+        default;
+
+    user-select:
+        none;
+
+    -webkit-user-select:
+        none;
+
+    touch-action:
+        none;
+}
+
+
+/* =====================================================
+   BACKGROUND ORBIT
+===================================================== */
+
+.surface-finishing-stage::before {
+    content:
+        "";
+
+    position: absolute;
+
+    left:
+        50%;
+
+    top:
+        50%;
+
+    width:
+        min(
+            34rem,
+            77%
+        );
+
+    aspect-ratio:
+        1;
+
+    transform:
+        translate(
+            -50%,
+            -50%
+        );
+
+    border:
+        1px solid
+        rgba(
+            255,
+            255,
+            255,
+            0.055
+        );
+
+    border-radius:
+        50%;
+
+    pointer-events:
+        none;
+}
+
+
+.surface-finishing-stage::after {
+    content:
+        "";
+
+    position: absolute;
+
+    left:
+        50%;
+
+    top:
+        50%;
+
+    width:
+        min(
+            24rem,
+            54%
+        );
+
+    aspect-ratio:
+        1;
+
+    transform:
+        translate(
+            -50%,
+            -50%
+        );
+
+    border:
+        1px solid
+        rgba(
+            255,
+            255,
+            255,
+            0.025
+        );
+
+    border-radius:
+        50%;
+
+    pointer-events:
+        none;
+}
+
+
+/* =====================================================
+   IMAGES
+===================================================== */
+
+.surface-finishing-image {
+    position: absolute;
+
+    left:
+        50%;
+
+    top:
+        50%;
+
+    width:
+        min(
+            68%,
+            490px
+        );
+
+    max-height:
+        72vh;
+
+    object-fit:
+        contain;
+
+    transform:
+        translate(
+            -50%,
+            -50%
+        );
+
+    user-select:
+        none;
+
+    -webkit-user-select:
+        none;
+
+    -webkit-user-drag:
+        none;
+
+    pointer-events:
+        none;
+}
+
+
+/* =====================================================
+   RAW VERSION
+===================================================== */
+
+.surface-finishing-raw {
+    z-index:
+        1;
+
+    filter:
+        grayscale(0.50)
+        saturate(0.48)
+        brightness(0.70)
+        contrast(1.22)
+        drop-shadow(
+            0
+            25px
+            32px
+            rgba(
+                0,
+                0,
+                0,
+                0.28
+            )
+        );
+}
+
+
+/* =====================================================
+   POLISHED VERSION
+===================================================== */
+
+.surface-finishing-polished-wrap {
+    position: absolute;
+
+    inset:
+        0;
+
+    z-index:
+        2;
+
+    overflow:
+        hidden;
+
+    clip-path:
+        inset(
+            0
+            calc(
+                100% -
+                var(--reveal)
+            )
+            0
+            0
+        );
+
+    pointer-events:
+        none;
+}
+
+
+.surface-finishing-polished {
+    filter:
+        saturate(1.05)
+        brightness(1.08)
+        contrast(1.08)
+        drop-shadow(
+            0
+            28px
+            36px
+            rgba(
+                0,
+                0,
+                0,
+                0.35
+            )
+        );
+}
+
+
+/* =====================================================
+   MOVING REFLECTION
+===================================================== */
+
+.surface-finishing-light {
+    position: absolute;
+
+    top:
+        15%;
+
+    bottom:
+        15%;
+
+    left:
+        var(--reveal);
+
+    z-index:
+        3;
+
+    width:
+        8rem;
+
+    transform:
+        translateX(-50%);
+
+    background:
+
+        linear-gradient(
+            90deg,
+
+            rgba(
+                255,
+                255,
+                255,
+                0
+            ),
+
+            rgba(
+                255,
+                255,
+                255,
+                0.06
+            ),
+
+            rgba(
+                255,
+                255,
+                255,
+                0.15
+            ),
+
+            rgba(
+                255,
+                255,
+                255,
+                0.04
+            ),
+
+            rgba(
+                255,
+                255,
+                255,
+                0
+            )
+        );
+
+    filter:
+        blur(12px);
+
+    opacity:
+        0.7;
+
+    pointer-events:
+        none;
+}
+
+
+/* =====================================================
+   DIVIDER
+===================================================== */
+
+.surface-finishing-divider {
+    position: absolute;
+
+    top:
+        14%;
+
+    bottom:
+        14%;
+
+    left:
+        var(--reveal);
+
+    z-index:
+        4;
+
+    width:
+        1px;
+
+    background:
+
+        linear-gradient(
+            to bottom,
+
+            transparent,
+
+            rgba(
+                236,
+                235,
+                231,
+                0.22
+            )
+            15%,
+
+            rgba(
+                236,
+                235,
+                231,
+                0.72
+            )
+            50%,
+
+            rgba(
+                236,
+                235,
+                231,
+                0.22
+            )
+            85%,
+
+            transparent
+
+        );
+
+    transform:
+        translateX(-50%);
+
+    pointer-events:
+        none;
+}
+
+
+.surface-finishing-divider span {
+    position: absolute;
+
+    left:
+        50%;
+
+    top:
+        50%;
+
+    width:
+        36px;
+
+    height:
+        36px;
+
+    transform:
+        translate(
+            -50%,
+            -50%
+        );
+
+    border:
+        1px solid
+        rgba(
+            236,
+            235,
+            231,
+            0.55
+        );
+
+    border-radius:
+        50%;
+
+    background:
+        rgba(
+            21,
+            24,
+            29,
+            0.70
+        );
+
+    backdrop-filter:
+        blur(6px);
+}
+
+
+.surface-finishing-divider span::before,
+.surface-finishing-divider span::after {
+    content:
+        "";
+
+    position: absolute;
+
+    top:
+        50%;
+
+    width:
+        5px;
+
+    height:
+        5px;
+
+    border-top:
+        1px solid
+        rgba(
+            236,
+            235,
+            231,
+            0.75
+        );
+
+    border-left:
+        1px solid
+        rgba(
+            236,
+            235,
+            231,
+            0.75
+        );
+}
+
+
+.surface-finishing-divider span::before {
+    left:
+        9px;
+
+    transform:
+        translateY(-50%)
+        rotate(-45deg);
+}
+
+
+.surface-finishing-divider span::after {
+    right:
+        9px;
+
+    transform:
+        translateY(-50%)
+        rotate(135deg);
+}
+
+
+/* =====================================================
+   LABELS
+===================================================== */
+
+.surface-finishing-label {
+    position: absolute;
+
+    bottom:
+        9%;
+
+    z-index:
+        5;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap:
+        0.25rem;
+
+    pointer-events:
+        none;
+}
+
+
+.surface-finishing-label span {
+    color:
+        var(--mut);
+
+    font-size:
+        0.56rem;
+
+    letter-spacing:
+        0.14em;
+}
+
+
+.surface-finishing-label strong {
+    color:
+        var(--fg);
+
+    font-size:
+        0.67rem;
+
+    font-weight:
+        400;
+
+    letter-spacing:
+        0.16em;
+}
+
+
+.surface-finishing-label-left {
+    left:
+        7%;
+}
+
+
+.surface-finishing-label-right {
+    right:
+        7%;
+
+    text-align:
+        right;
+}
+
+
+/* =====================================================
+   STATUS
+===================================================== */
+
+.surface-finishing-status {
+    position: absolute;
+
+    top:
+        10vh;
+
+    right:
+        4vw;
+
+    z-index:
+        5;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items:
+        flex-end;
+
+    pointer-events:
+        none;
+}
+
+
+.surface-finishing-status span {
+    color:
+        var(--mut);
+
+    font-size:
+        0.58rem;
+
+    letter-spacing:
+        0.16em;
+}
+
+
+.surface-finishing-status strong {
+    margin-top:
+        0.25rem;
+
+    font-size:
+        1.2rem;
+
+    font-weight:
+        300;
+
+    letter-spacing:
+        0.04em;
+}
+
+
+/* =====================================================
+   HINT
+===================================================== */
+
+.surface-finishing-hint {
+    position: absolute;
+
+    left:
+        50%;
+
+    bottom:
+        4vh;
+
+    z-index:
+        5;
+
+    transform:
+        translateX(-50%);
+
+    color:
+        var(--mut);
+
+    font-size:
+        0.66rem;
+
+    letter-spacing:
+        0.16em;
+
+    text-transform:
+        uppercase;
+
+    pointer-events:
+        none;
+}
+
+
+/* =====================================================
+   ACTIVE STATE
+===================================================== */
+
+.surface-finishing-stage.is-dragging {
+    cursor:
+        ew-resize;
+}
+
+
+.surface-finishing-stage.is-dragging
+.surface-finishing-divider span {
+
+    transform:
+        translate(
+            -50%,
+            -50%
+        )
+        scale(1.08);
+}
+
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media (max-width: 700px) {
+
+    .surface-finishing {
+        min-height:
+            100svh;
+    }
+
+
+    .surface-finishing-copy {
+        top:
+            6rem;
+
+        left:
+            6vw;
+
+        right:
+            6vw;
+
+        width:
+            auto;
+
+        transform:
+            none;
+    }
+
+
+    .surface-finishing-copy h2 {
+        font-size:
+            clamp(
+                2.5rem,
+                11vw,
+                4rem
+            );
+    }
+
+
+    .surface-finishing-copy > p:last-child {
+        max-width:
+            88%;
+    }
+
+
+    .surface-finishing-stage {
+        width:
+            100%;
+
+        height:
+            70vh;
+
+        margin-left:
+            0;
+
+        margin-top:
+            17vh;
+    }
+
+
+    .surface-finishing-image {
+        width:
+            min(
+                76%,
+                420px
+            );
+
+        max-height:
+            50vh;
+    }
+
+
+    .surface-finishing-status {
+        top:
+            auto;
+
+        right:
+            6vw;
+
+        bottom:
+            9vh;
+    }
+
+
+    .surface-finishing-hint {
+        left:
+            6vw;
+
+        bottom:
+            4vh;
+
+        transform:
+            none;
+    }
+
+
+    .surface-finishing-label {
+        bottom:
+            12%;
+    }
+
+}

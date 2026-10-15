@@ -1,0 +1,572 @@
+:root {
+
+    --bg:
+        #15181d;
+
+    --fg:
+        #ecebe7;
+
+    --mut:
+        #9a9fa7;
+
+    --line:
+        #2b3037;
+
+}
+
+
+/* =====================================================
+   RESET
+===================================================== */
+
+* {
+    box-sizing:
+        border-box;
+}
+
+
+html {
+    scroll-behavior:
+        smooth;
+}
+
+
+body {
+
+    margin:
+        0;
+
+    min-height:
+        100vh;
+
+    background:
+        var(--bg);
+
+    color:
+        var(--fg);
+
+    font-family:
+        "Jost",
+        system-ui,
+        sans-serif;
+
+}
+
+
+a {
+    color:
+        inherit;
+}
+
+
+/* =====================================================
+   HEADER
+===================================================== */
+
+.product-header {
+
+    position:
+        absolute;
+
+    top:
+        0;
+
+    left:
+        0;
+
+    right:
+        0;
+
+    z-index:
+        10;
+
+    padding:
+        1.5rem
+        6vw;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+}
+
+
+.product-brand {
+
+    display:
+        inline-flex;
+
+    align-items:
+        baseline;
+
+    gap:
+        0.6rem;
+
+    color:
+        var(--fg);
+
+    text-decoration:
+        none;
+
+    font-size:
+        0.95rem;
+
+    font-weight:
+        500;
+
+    letter-spacing:
+        0.02em;
+
+}
+
+
+.product-brand span {
+
+    color:
+        var(--mut);
+
+    font-size:
+        0.72rem;
+
+    font-weight:
+        300;
+
+    letter-spacing:
+        0.10em;
+
+    text-transform:
+        uppercase;
+
+}
+
+
+/* =====================================================
+   PAGE
+===================================================== */
+
+.product-page {
+
+    min-height:
+        100vh;
+
+    padding:
+        7.5rem
+        6vw
+        4rem;
+
+}
+
+
+.product-back {
+
+    display:
+        inline-block;
+
+    margin-bottom:
+        2.5rem;
+
+    color:
+        var(--mut);
+
+    text-decoration:
+        none;
+
+    text-transform:
+        uppercase;
+
+    font-size:
+        0.68rem;
+
+    letter-spacing:
+        0.14em;
+
+    transition:
+        color
+        0.25s
+        ease;
+
+}
+
+
+.product-back:hover {
+    color:
+        var(--fg);
+}
+
+
+/* =====================================================
+   HERO
+===================================================== */
+
+.product-hero {
+
+    min-height:
+        calc(
+            100vh -
+            11rem
+        );
+
+    display:
+        grid;
+
+    grid-template-columns:
+        minmax(
+            0,
+            1.2fr
+        )
+
+        minmax(
+            19rem,
+            0.8fr
+        );
+
+    align-items:
+        center;
+
+    gap:
+        clamp(
+            3rem,
+            7vw,
+            8rem
+        );
+
+}
+
+
+/* =====================================================
+   IMAGE
+===================================================== */
+
+.product-visual {
+
+    min-height:
+        65vh;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    position:
+        relative;
+
+}
+
+
+.product-visual::before {
+
+    content:
+        "";
+
+    position:
+        absolute;
+
+    width:
+        min(
+            36rem,
+            72%
+        );
+
+    aspect-ratio:
+        1;
+
+    border:
+        1px solid
+        rgba(
+            255,
+            255,
+            255,
+            0.05
+        );
+
+    border-radius:
+        50%;
+
+    pointer-events:
+        none;
+
+}
+
+
+.product-visual img {
+
+    position:
+        relative;
+
+    z-index:
+        1;
+
+    display:
+        block;
+
+    width:
+        min(
+            82%,
+            680px
+        );
+
+    max-height:
+        72vh;
+
+    object-fit:
+        contain;
+
+    filter:
+        drop-shadow(
+            0
+            24px
+            34px
+            rgba(
+                0,
+                0,
+                0,
+                0.26
+            )
+        );
+
+}
+
+
+/* =====================================================
+   CONTENT
+===================================================== */
+
+.kicker {
+
+    margin:
+        0
+        0
+        1.25rem;
+
+    color:
+        var(--mut);
+
+    font-size:
+        0.70rem;
+
+    letter-spacing:
+        0.16em;
+
+    text-transform:
+        uppercase;
+
+}
+
+
+.product-content h1 {
+
+    margin:
+        0
+        0
+        1.6rem;
+
+    font-size:
+        clamp(
+            4rem,
+            8vw,
+            8.5rem
+        );
+
+    line-height:
+        0.88;
+
+    font-weight:
+        300;
+
+    letter-spacing:
+        -0.055em;
+
+}
+
+
+.product-description {
+
+    max-width:
+        34rem;
+
+    margin:
+        0;
+
+    color:
+        var(--mut);
+
+    font-size:
+        clamp(
+            1rem,
+            1.2vw,
+            1.08rem
+        );
+
+    line-height:
+        1.7;
+
+}
+
+
+/* =====================================================
+   DATA
+===================================================== */
+
+.product-data {
+
+    margin-top:
+        3.5rem;
+
+    border-top:
+        1px solid
+        var(--line);
+
+}
+
+
+.product-data > div {
+
+    padding:
+        1rem
+        0;
+
+    display:
+        flex;
+
+    justify-content:
+        space-between;
+
+    align-items:
+        center;
+
+    gap:
+        2rem;
+
+    border-bottom:
+        1px solid
+        var(--line);
+
+}
+
+
+.product-data span {
+
+    color:
+        var(--mut);
+
+    font-size:
+        0.62rem;
+
+    letter-spacing:
+        0.14em;
+
+}
+
+
+.product-data strong {
+
+    font-size:
+        0.9rem;
+
+    font-weight:
+        400;
+
+    text-align:
+        right;
+
+}
+
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media (
+    max-width:
+    820px
+) {
+
+    .product-page {
+
+        padding:
+            6.5rem
+            6vw
+            3rem;
+
+    }
+
+
+    .product-hero {
+
+        min-height:
+            auto;
+
+        display:
+            flex;
+
+        flex-direction:
+            column;
+
+        align-items:
+            stretch;
+
+        gap:
+            1.5rem;
+
+    }
+
+
+    .product-visual {
+
+        min-height:
+            42vh;
+
+    }
+
+
+    .product-visual::before {
+
+        width:
+            min(
+                25rem,
+                78%
+            );
+
+    }
+
+
+    .product-visual img {
+
+        width:
+            min(
+                88%,
+                520px
+            );
+
+        max-height:
+            48vh;
+
+    }
+
+
+    .product-content h1 {
+
+        font-size:
+            clamp(
+                3.6rem,
+                17vw,
+                6.5rem
+            );
+
+    }
+
+
+    .product-data {
+
+        margin-top:
+            2.5rem;
+
+    }
+
+}

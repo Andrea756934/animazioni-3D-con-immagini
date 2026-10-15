@@ -1,0 +1,97 @@
+:root {
+    --bg: #f2f2ef;
+    --fg: #25272b;
+    --mut: #777c84;
+    --line: rgba(37, 39, 43, 0.14);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    background: var(--bg);
+    color: var(--fg);
+    font-family: "Jost", system-ui, sans-serif;
+}
+
+.product-header {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 10;
+    padding: 1.5rem 7vw;
+}
+
+.product-brand {
+    display: inline-flex;
+    flex-direction: column;
+    color: var(--fg);
+    text-decoration: none;
+    font-size: 1rem;
+    font-weight: 500;
+    line-height: 1.05;
+    letter-spacing: 0.03em;
+}
+
+.product-brand span {
+    margin-top: 0.25rem;
+    color: var(--mut);
+    font-size: 0.62rem;
+    font-weight: 400;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+
+.product-page {
+    min-height: 100vh;
+    padding: 8rem 7vw 5rem;
+}
+
+.product-back {
+    display: inline-block;
+    margin-bottom: 3rem;
+    color: var(--mut);
+    font-size: 0.75rem;
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    transition: color 0.25s ease;
+}
+
+.product-back:hover {
+    color: var(--fg);
+}
+
+.product-hero {
+    min-height: calc(100vh - 12rem);
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) minmax(20rem, 0.8fr);
+    align-items: center;
+    gap: 6vw;
+}
+
+.product-visual {
+    min-height: 65vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.product-visual img {
+    display: block;
+    width: min(90%, 750px);
+    max-height: 72vh;
+    object-fit: contain;
+}
+
+.kicker {
+    margin: 0 0 1.25rem;
+}
