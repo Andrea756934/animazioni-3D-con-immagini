@@ -3324,3 +3324,984 @@ footer {
         color .35s ease,
         transform .35s ease;
 }
+
+/* =====================================================
+   NEGATIVE SPACE REVEAL
+===================================================== */
+
+.negative-space-track {
+    position: relative;
+
+    height: 540vh;
+
+    border-top:
+        1px solid
+        var(--line);
+}
+
+
+.negative-space-stage {
+    position: sticky;
+
+    top: 0;
+
+    height: 100svh;
+
+    overflow: hidden;
+
+    background:
+        var(--bg);
+
+    color:
+        var(--fg);
+}
+
+
+/* =====================================================
+   COPY
+===================================================== */
+
+.negative-space-copy {
+    position: absolute;
+
+    top: 50%;
+    left: 7vw;
+
+    z-index: 5;
+
+    width:
+        min(
+            29rem,
+            32vw
+        );
+
+    transform:
+        translateY(-50%);
+
+    pointer-events:
+        none;
+}
+
+
+.negative-space-copy h2 {
+    margin:
+        0
+        0
+        1.3rem;
+
+    font-size:
+        clamp(
+            2.8rem,
+            5vw,
+            5.6rem
+        );
+
+    line-height:
+        .94;
+
+    font-weight:
+        300;
+
+    letter-spacing:
+        -.04em;
+}
+
+
+.negative-space-copy > p:last-child {
+    max-width:
+        24rem;
+
+    margin: 0;
+
+    color:
+        var(--mut);
+
+    line-height:
+        1.65;
+
+    transition:
+        opacity .22s ease,
+        transform .22s ease;
+}
+
+
+.negative-space-copy > p:last-child.is-changing {
+    opacity: 0;
+
+    transform:
+        translateY(6px);
+}
+
+
+/* =====================================================
+   OBJECT WRAPPER
+===================================================== */
+
+.negative-space-object-wrap {
+    position: absolute;
+
+    left: 66%;
+    top: 50%;
+
+    z-index: 2;
+
+    width:
+        min(
+            38vw,
+            500px
+        );
+
+    transform:
+        translate(
+            -50%,
+            -50%
+        );
+
+    pointer-events:
+        none;
+}
+
+
+/* =====================================================
+   OBJECT
+===================================================== */
+
+.negative-space-object {
+    --reveal: 0%;
+
+    position: relative;
+
+    width: 100%;
+
+    aspect-ratio: 1 / 1.2;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    will-change:
+        transform;
+}
+
+
+/* =====================================================
+   IMAGES
+===================================================== */
+
+.negative-space-image {
+    position: absolute;
+
+    left: 50%;
+    top: 50%;
+
+    width:
+        min(
+            92%,
+            470px
+        );
+
+    max-height:
+        72vh;
+
+    object-fit: contain;
+
+    transform:
+        translate(
+            -50%,
+            -50%
+        );
+
+    user-select: none;
+
+    -webkit-user-select: none;
+    -webkit-user-drag: none;
+
+    pointer-events: none;
+
+    will-change:
+        clip-path,
+        opacity,
+        transform;
+}
+
+
+/* =====================================================
+   SOLID OBJECT
+===================================================== */
+
+.negative-space-solid {
+    z-index: 2;
+
+    clip-path:
+        inset(
+            var(--reveal)
+            0
+            0
+            0
+        );
+
+    filter:
+        drop-shadow(
+            0
+            28px
+            34px
+            rgba(0,0,0,.28)
+        );
+}
+
+
+/* =====================================================
+   FINAL OBJECT
+===================================================== */
+
+.negative-space-final {
+    z-index: 3;
+
+    clip-path:
+        inset(
+            0
+            0
+            calc(
+                100% -
+                var(--reveal)
+            )
+            0
+        );
+
+    filter:
+        drop-shadow(
+            0
+            28px
+            34px
+            rgba(0,0,0,.30)
+        );
+}
+
+
+/* =====================================================
+   SCAN LINE
+===================================================== */
+
+.negative-space-scan {
+    position: absolute;
+
+    left: 4%;
+    right: 4%;
+
+    top:
+        var(--reveal);
+
+    z-index: 4;
+
+    height: 1px;
+
+    background:
+
+        linear-gradient(
+            90deg,
+
+            transparent,
+
+            rgba(
+                236,
+                235,
+                231,
+                .22
+            ),
+
+            rgba(
+                255,
+                255,
+                255,
+                .95
+            ),
+
+            rgba(
+                236,
+                235,
+                231,
+                .22
+            ),
+
+            transparent
+        );
+
+    box-shadow:
+        0
+        0
+        16px
+        rgba(
+            255,
+            255,
+            255,
+            .16
+        );
+
+    opacity:
+        var(
+            --scan-opacity,
+            0
+        );
+
+    will-change:
+        top,
+        opacity;
+}
+
+
+.negative-space-scan span {
+    position: absolute;
+
+    top: -1.6rem;
+    right: 0;
+
+    color:
+        var(--mut);
+
+    font-size:
+        .54rem;
+
+    letter-spacing:
+        .16em;
+
+    white-space:
+        nowrap;
+}
+
+
+/* =====================================================
+   TECHNICAL FRAME
+===================================================== */
+
+.negative-space-frame {
+    position: absolute;
+
+    inset:
+        7% 2%;
+
+    z-index: 0;
+
+    opacity:
+        var(
+            --frame-opacity,
+            .18
+        );
+
+    transition:
+        opacity .2s ease;
+}
+
+
+.negative-space-frame::before {
+    content: "";
+
+    position: absolute;
+
+    left: 50%;
+    top: 0;
+    bottom: 0;
+
+    width: 1px;
+
+    background:
+
+        linear-gradient(
+            transparent,
+            rgba(255,255,255,.10),
+            transparent
+        );
+}
+
+
+.negative-space-frame::after {
+    content: "";
+
+    position: absolute;
+
+    top: 50%;
+    left: 0;
+    right: 0;
+
+    height: 1px;
+
+    background:
+
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(255,255,255,.10),
+            transparent
+        );
+}
+
+
+/* =====================================================
+   CORNERS
+===================================================== */
+
+.negative-space-frame .corner {
+    position: absolute;
+
+    width: 18px;
+    height: 18px;
+
+    opacity: .6;
+}
+
+
+.negative-space-frame .c1 {
+    top: 0;
+    left: 0;
+
+    border-top:
+        1px solid
+        var(--mut);
+
+    border-left:
+        1px solid
+        var(--mut);
+}
+
+
+.negative-space-frame .c2 {
+    top: 0;
+    right: 0;
+
+    border-top:
+        1px solid
+        var(--mut);
+
+    border-right:
+        1px solid
+        var(--mut);
+}
+
+
+.negative-space-frame .c3 {
+    bottom: 0;
+    left: 0;
+
+    border-bottom:
+        1px solid
+        var(--mut);
+
+    border-left:
+        1px solid
+        var(--mut);
+}
+
+
+.negative-space-frame .c4 {
+    bottom: 0;
+    right: 0;
+
+    border-bottom:
+        1px solid
+        var(--mut);
+
+    border-right:
+        1px solid
+        var(--mut);
+}
+
+
+/* =====================================================
+   STATUS
+===================================================== */
+
+.negative-space-status {
+    position: absolute;
+
+    top: 12vh;
+    right: 4vw;
+
+    z-index: 5;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: flex-end;
+
+    pointer-events: none;
+}
+
+
+.negative-space-status > span {
+    color:
+        var(--mut);
+
+    font-size:
+        .58rem;
+
+    letter-spacing:
+        .18em;
+}
+
+
+#negativeSpaceStatus {
+    margin-top:
+        .25rem;
+
+    color:
+        var(--fg);
+
+    font-size:
+        1.15rem;
+
+    font-weight:
+        300;
+
+    letter-spacing:
+        .08em;
+
+    transition:
+        opacity .2s ease,
+        transform .2s ease;
+}
+
+
+#negativeSpacePercent {
+    margin-top:
+        .15rem;
+
+    color:
+        var(--mut);
+
+    font-size:
+        .68rem;
+
+    letter-spacing:
+        .1em;
+}
+
+
+/* =====================================================
+   STEPS
+===================================================== */
+
+.negative-space-steps {
+    position: absolute;
+
+    left: 3vw;
+    top: 50%;
+
+    z-index: 5;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap:
+        .8rem;
+
+    transform:
+        translateY(-50%);
+
+    pointer-events: none;
+}
+
+
+.negative-space-steps span {
+    color:
+        var(--mut);
+
+    font-size:
+        .62rem;
+
+    opacity:
+        .25;
+
+    transition:
+        opacity .35s ease,
+        transform .35s ease,
+        color .35s ease;
+}
+
+
+.negative-space-steps span.is-active {
+    color:
+        var(--fg);
+
+    opacity: 1;
+
+    transform:
+        translateX(5px);
+}
+
+
+/* =====================================================
+   HINT
+===================================================== */
+
+.negative-space-hint {
+    position: absolute;
+
+    left: 50%;
+    bottom: 4vh;
+
+    z-index: 5;
+
+    transform:
+        translateX(-50%);
+
+    color:
+        var(--mut);
+
+    font-size:
+        .68rem;
+
+    letter-spacing:
+        .16em;
+
+    text-transform:
+        uppercase;
+
+    pointer-events: none;
+}
+
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media (max-width: 700px) {
+
+    .negative-space-track {
+        height:
+            480vh;
+    }
+
+
+    .negative-space-copy {
+        top:
+            6rem;
+
+        left:
+            6vw;
+
+        right:
+            6vw;
+
+        width:
+            auto;
+
+        transform:
+            none;
+    }
+
+
+    .negative-space-copy h2 {
+        font-size:
+            clamp(
+                2.3rem,
+                10vw,
+                3.7rem
+            );
+    }
+
+
+    .negative-space-copy > p:last-child {
+        max-width:
+            88%;
+
+        font-size:
+            .92rem;
+    }
+
+
+    .negative-space-object-wrap {
+        left:
+            50%;
+
+        top:
+            60%;
+
+        width:
+            min(
+                68vw,
+                350px
+            );
+    }
+
+
+    .negative-space-image {
+        width:
+            92%;
+
+        max-height:
+            48vh;
+    }
+
+
+    .negative-space-status {
+        top:
+            auto;
+
+        right:
+            6vw;
+
+        bottom:
+            9vh;
+    }
+
+
+    .negative-space-steps {
+        display:
+            none;
+    }
+
+
+    .negative-space-hint {
+        left:
+            6vw;
+
+        bottom:
+            3vh;
+
+        transform:
+            none;
+    }
+
+}
+
+.negative-space-track1 {
+    position: relative;
+    height: 420vh;
+    border-top: 1px solid var(--line);
+}
+
+.negative-space-stage1 {
+    position: sticky;
+    top: 0;
+    height: 100svh;
+    overflow: hidden;
+    background: var(--bg);
+    color: var(--fg);
+}
+
+.kicker1 {
+    color: var(--mut);
+    font-size: .72rem;
+    text-transform: uppercase;
+    letter-spacing: .16em;
+}
+
+.negative-space-copy1 {
+    position: absolute;
+    top: 50%;
+    left: 7vw;
+    z-index: 5;
+    width: min(29rem, 32vw);
+    transform: translateY(-50%);
+    pointer-events: none;
+}
+
+.negative-space-copy1 h2 {
+    margin: 0 0 1.3rem;
+    font-size: clamp(2.8rem, 5vw, 5.6rem);
+    line-height: .94;
+    font-weight: 300;
+    letter-spacing: -.04em;
+}
+
+.negative-space-copy1 p:last-child {
+    max-width: 24rem;
+    margin: 0;
+    color: var(--mut);
+    line-height: 1.65;
+}
+
+.negative-space-object-wrap1 {
+    position: absolute;
+    left: 66%;
+    top: 50%;
+    z-index: 2;
+    width: min(38vw, 490px);
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+}
+
+.negative-space-object1 {
+    --reveal-progress: 0%;
+    --scan-opacity: 0;
+    position: relative;
+    width: 100%;
+    will-change: transform;
+}
+
+.negative-space-reference1 {
+    display: block;
+    width: 100%;
+    height: auto;
+    visibility: hidden;
+    pointer-events: none;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-user-drag: none;
+}
+
+.negative-space-layer1 {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    pointer-events: none;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-user-drag: none;
+    will-change: opacity, clip-path, filter, transform;
+}
+
+.negative-space-wireframe1 {
+    z-index: 2;
+    opacity: 1;
+
+    /*
+        Sotto la linea rimane il disegno.
+        Man mano che la linea scende,
+        il wireframe sparisce dall’alto.
+    */
+    clip-path: inset(var(--reveal-progress) 0 0 0);
+
+    filter: drop-shadow(0 0 7px rgba(210,225,240,.13));
+}
+
+.negative-space-final1 {
+    z-index: 3;
+    opacity: 1;
+
+    /*
+        Sopra la linea compare l'immagine finale.
+    */
+    clip-path: inset(0 0 calc(100% - var(--reveal-progress)) 0);
+
+    filter:
+        saturate(.88)
+        brightness(.94)
+        contrast(1.04)
+        drop-shadow(0 26px 34px rgba(0,0,0,.22));
+}
+
+.negative-space-scan1 {
+    position: absolute;
+    left: -2%;
+    right: -2%;
+    top: var(--reveal-progress);
+    z-index: 4;
+    height: 2px;
+
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(236,235,231,.15),
+        rgba(255,255,255,.95),
+        rgba(236,235,231,.15),
+        transparent
+    );
+
+    box-shadow:
+        0 0 18px rgba(255,255,255,.20),
+        0 0 30px rgba(255,255,255,.08);
+
+    opacity: var(--scan-opacity);
+    will-change: top, opacity;
+}
+
+.negative-space-scan1 span {
+    position: absolute;
+    top: -1.5rem;
+    right: 0;
+    color: var(--mut);
+    font-size: .52rem;
+    letter-spacing: .17em;
+    white-space: nowrap;
+}
+
+.negative-space-status1 {
+    position: absolute;
+    top: 12vh;
+    right: 4vw;
+    z-index: 5;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    pointer-events: none;
+}
+
+.negative-space-status1 > span {
+    color: var(--mut);
+    font-size: .58rem;
+    letter-spacing: .18em;
+}
+
+#negativeSpaceStatus1 {
+    margin-top: .25rem;
+    color: var(--fg);
+    font-size: 1.15rem;
+    font-weight: 300;
+    letter-spacing: .08em;
+}
+
+#negativeSpacePercent1 {
+    margin-top: .15rem;
+    color: var(--mut);
+    font-size: .68rem;
+    letter-spacing: .1em;
+}
+
+.negative-space-hint1 {
+    position: absolute;
+    left: 50%;
+    bottom: 4vh;
+    z-index: 5;
+    transform: translateX(-50%);
+    color: var(--mut);
+    font-size: .68rem;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    pointer-events: none;
+}
+
+@media (max-width: 700px) {
+    .negative-space-track1 {
+        height: 360vh;
+    }
+
+    .negative-space-copy1 {
+        top: 6rem;
+        left: 6vw;
+        right: 6vw;
+        width: auto;
+        transform: none;
+    }
+
+    .negative-space-copy1 h2 {
+        font-size: clamp(2.3rem, 10vw, 3.7rem);
+    }
+
+    .negative-space-copy1 p:last-child {
+        max-width: 88%;
+        font-size: .92rem;
+    }
+
+    .negative-space-object-wrap1 {
+        left: 50%;
+        top: 60%;
+        width: min(68vw, 350px);
+    }
+
+    .negative-space-status1 {
+        top: auto;
+        right: 6vw;
+        bottom: 9vh;
+    }
+
+    .negative-space-hint1 {
+        left: 6vw;
+        bottom: 3vh;
+        transform: none;
+    }
+}

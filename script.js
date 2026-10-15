@@ -11758,3 +11758,1544 @@ stage.addEventListener(
     );
 
 })();
+
+// =====================================================
+// NEGATIVE SPACE REVEAL
+//
+// 01 -> volume pieno
+// 02 -> carving
+// 03 -> aperture / negative space
+// 04 -> geometria finale
+//
+// Il volume pieno viene generato UNA SOLA VOLTA
+// dall'immagine originale.
+//
+// Nessun canvas animato continuamente.
+// =====================================================
+
+(() => {
+
+    // =================================================
+    // ELEMENTS
+    // =================================================
+
+    const track =
+        document.getElementById(
+            'negative-space'
+        );
+
+
+    const object =
+        document.getElementById(
+            'negativeSpaceObject'
+        );
+
+
+    const solid =
+        document.getElementById(
+            'negativeSpaceSolid'
+        );
+
+
+    const finalImage =
+        document.getElementById(
+            'negativeSpaceFinal'
+        );
+
+
+    const status =
+        document.getElementById(
+            'negativeSpaceStatus'
+        );
+
+
+    const percent =
+        document.getElementById(
+            'negativeSpacePercent'
+        );
+
+
+    const description =
+        document.getElementById(
+            'negativeSpaceDescription'
+        );
+
+
+    const steps =
+        track?.querySelectorAll(
+            '.negative-space-steps span'
+        );
+
+
+    if (
+        !track ||
+        !object ||
+        !solid ||
+        !finalImage
+    ) {
+
+        return;
+
+    }
+
+
+    // =================================================
+    // CONFIG
+    // =================================================
+
+    const SOURCE =
+        'immagini/pendente2.png';
+
+
+    const SMOOTHING =
+        0.045;
+
+
+    const ALPHA_THRESHOLD =
+        18;
+
+
+    // =================================================
+    // UTILITY
+    // =================================================
+
+    const clamp = (
+        value,
+        min = 0,
+        max = 1
+    ) => {
+
+        return Math.min(
+            max,
+            Math.max(
+                min,
+                value
+            )
+        );
+
+    };
+
+
+    const lerp = (
+        a,
+        b,
+        amount
+    ) => {
+
+        return (
+            a +
+            (
+                b -
+                a
+            ) *
+            amount
+        );
+
+    };
+
+
+    const smoothstep = value => {
+
+        const t =
+            clamp(value);
+
+
+        return (
+
+            t *
+            t *
+            (
+                3 -
+                2 *
+                t
+            )
+
+        );
+
+    };
+
+
+    // =================================================
+    // CREATE SOLID SILHOUETTE
+    // =================================================
+
+    const sourceImage =
+        new Image();
+
+
+    sourceImage.decoding =
+        'async';
+
+
+    sourceImage.onload =
+        createSolidVersion;
+
+
+    sourceImage.onerror =
+        () => {
+
+            console.error(
+                'Negative Space: immagine non trovata',
+                SOURCE
+            );
+
+        };
+
+
+    sourceImage.src =
+        SOURCE;
+
+
+    function createSolidVersion() {
+
+        /*
+            Riduciamo la risoluzione perché
+            questa operazione viene eseguita
+            solamente una volta.
+        */
+
+        const maxHeight =
+            700;
+
+
+        const ratio =
+
+            sourceImage.naturalWidth /
+            sourceImage.naturalHeight;
+
+
+        const h =
+
+            Math.min(
+                maxHeight,
+                sourceImage.naturalHeight
+            );
+
+
+        const w =
+
+            Math.max(
+                1,
+                Math.round(
+                    h *
+                    ratio
+                )
+            );
+
+
+        const canvas =
+            document.createElement(
+                'canvas'
+            );
+
+
+        const ctx =
+            canvas.getContext(
+                '2d',
+                {
+                    willReadFrequently:
+                        true
+                }
+            );
+
+
+        canvas.width =
+            w;
+
+        canvas.height =
+            h;
+
+
+        ctx.clearRect(
+            0,
+            0,
+            w,
+            h
+        );
+
+
+        ctx.drawImage(
+            sourceImage,
+            0,
+            0,
+            w,
+            h
+        );
+
+
+        const imageData =
+
+            ctx.getImageData(
+                0,
+                0,
+                w,
+                h
+            );
+
+
+        const data =
+            imageData.data;
+
+
+        /*
+            outside[index] = 1
+
+            significa che quel pixel trasparente
+            è collegato allo sfondo esterno.
+
+            Tutti i pixel trasparenti NON collegati
+            all'esterno sono quindi aperture interne
+            del pendente.
+
+            Sono proprio quelle che riempiamo.
+        */
+
+        const outside =
+            new Uint8Array(
+                w *
+                h
+            );
+
+
+        const queue =
+            new Int32Array(
+                w *
+                h
+            );
+
+
+        let head =
+            0;
+
+
+        let tail =
+            0;
+
+
+        // =================================================
+        // ADD PIXEL TO FLOOD FILL
+        // =================================================
+
+        function enqueue(
+            x,
+            y
+        ) {
+
+            if (
+                x < 0 ||
+                y < 0 ||
+                x >= w ||
+                y >= h
+            ) {
+
+                return;
+
+            }
+
+
+            const index =
+
+                y *
+                w +
+                x;
+
+
+            if (
+                outside[index]
+            ) {
+
+                return;
+
+            }
+
+
+            const alpha =
+
+                data[
+                    index *
+                    4 +
+                    3
+                ];
+
+
+            if (
+                alpha >
+                ALPHA_THRESHOLD
+            ) {
+
+                return;
+
+            }
+
+
+            outside[index] =
+                1;
+
+
+            queue[tail++] =
+                index;
+
+        }
+
+
+        // =================================================
+        // BORDERS
+        // =================================================
+
+        for (
+            let x = 0;
+            x < w;
+            x++
+        ) {
+
+            enqueue(
+                x,
+                0
+            );
+
+
+            enqueue(
+                x,
+                h - 1
+            );
+
+        }
+
+
+        for (
+            let y = 0;
+            y < h;
+            y++
+        ) {
+
+            enqueue(
+                0,
+                y
+            );
+
+
+            enqueue(
+                w - 1,
+                y
+            );
+
+        }
+
+
+        // =================================================
+        // FLOOD FILL
+        // =================================================
+
+        while (
+            head <
+            tail
+        ) {
+
+            const index =
+                queue[head++];
+
+
+            const x =
+                index %
+                w;
+
+
+            const y =
+
+                Math.floor(
+                    index /
+                    w
+                );
+
+
+            enqueue(
+                x + 1,
+                y
+            );
+
+
+            enqueue(
+                x - 1,
+                y
+            );
+
+
+            enqueue(
+                x,
+                y + 1
+            );
+
+
+            enqueue(
+                x,
+                y - 1
+            );
+
+        }
+
+
+        // =================================================
+        // OUTPUT
+        // =================================================
+
+        const output =
+
+            ctx.createImageData(
+                w,
+                h
+            );
+
+
+        const out =
+            output.data;
+
+
+        for (
+            let y = 0;
+            y < h;
+            y++
+        ) {
+
+            /*
+                Leggerissimo gradiente verticale,
+                così il volume non sembra
+                completamente piatto.
+            */
+
+            const vertical =
+
+                y /
+                Math.max(
+                    1,
+                    h - 1
+                );
+
+
+            const light =
+
+                1.08 -
+
+                vertical *
+                0.20;
+
+
+            for (
+                let x = 0;
+                x < w;
+                x++
+            ) {
+
+                const pixelIndex =
+
+                    y *
+                    w +
+                    x;
+
+
+                const i =
+
+                    pixelIndex *
+                    4;
+
+
+                const alpha =
+                    data[
+                        i + 3
+                    ];
+
+
+                const originalPixel =
+
+                    alpha >
+                    ALPHA_THRESHOLD;
+
+
+                const internalVoid =
+
+                    !outside[pixelIndex] &&
+                    !originalPixel;
+
+
+                /*
+                    Disegniamo:
+
+                    - materiale originale
+                    - oppure aperture interne riempite
+
+                    Non disegniamo lo sfondo esterno.
+                */
+
+                if (
+                    !originalPixel &&
+                    !internalVoid
+                ) {
+
+                    continue;
+
+                }
+
+
+                // =====================================
+                // GOLD BASE
+                // =====================================
+
+                const baseR =
+                    198 *
+                    light;
+
+
+                const baseG =
+                    151 *
+                    light;
+
+
+                const baseB =
+                    67 *
+                    light;
+
+
+                /*
+                    Dove esiste già il pendente originale
+                    manteniamo un po' della texture reale.
+
+                    Dove prima c'era un buco,
+                    creiamo metallo pieno.
+                */
+
+                if (
+                    originalPixel
+                ) {
+
+                    const mix =
+                        0.42;
+
+
+                    out[i] =
+
+                        Math.round(
+
+                            baseR *
+                            (
+                                1 -
+                                mix
+                            )
+
+                            +
+
+                            data[i] *
+                            mix
+
+                        );
+
+
+                    out[i + 1] =
+
+                        Math.round(
+
+                            baseG *
+                            (
+                                1 -
+                                mix
+                            )
+
+                            +
+
+                            data[i + 1] *
+                            mix
+
+                        );
+
+
+                    out[i + 2] =
+
+                        Math.round(
+
+                            baseB *
+                            (
+                                1 -
+                                mix
+                            )
+
+                            +
+
+                            data[i + 2] *
+                            mix
+
+                        );
+
+
+                    out[i + 3] =
+                        Math.max(
+                            alpha,
+                            220
+                        );
+
+                }
+
+                else {
+
+                    out[i] =
+                        Math.round(
+                            baseR
+                        );
+
+
+                    out[i + 1] =
+                        Math.round(
+                            baseG
+                        );
+
+
+                    out[i + 2] =
+                        Math.round(
+                            baseB
+                        );
+
+
+                    out[i + 3] =
+                        255;
+
+                }
+
+            }
+
+        }
+
+
+        ctx.clearRect(
+            0,
+            0,
+            w,
+            h
+        );
+
+
+        ctx.putImageData(
+            output,
+            0,
+            0
+        );
+
+
+        solid.src =
+
+            canvas.toDataURL(
+                'image/png'
+            );
+
+    }
+
+
+    // =================================================
+    // STATES
+    // =================================================
+
+    const STATES = [
+
+        {
+            name:
+                'SOLID VOLUME',
+
+            text:
+                'Il processo parte da un volume continuo.'
+        },
+
+        {
+            name:
+                'CARVING',
+
+            text:
+                'La geometria interna viene progressivamente liberata.'
+        },
+
+        {
+            name:
+                'NEGATIVE SPACE',
+
+            text:
+                'Cavità e aperture diventano parte integrante del design.'
+        },
+
+        {
+            name:
+                'FINAL GEOMETRY',
+
+            text:
+                'La manifattura additiva rende possibile una struttura complessa e leggera.'
+        }
+
+    ];
+
+
+    let currentState =
+        0;
+
+
+    function setState(
+        index
+    ) {
+
+        if (
+            index ===
+            currentState
+        ) {
+
+            return;
+
+        }
+
+
+        currentState =
+            index;
+
+
+        if (
+            status
+        ) {
+
+            status.style.opacity =
+                '0';
+
+
+            status.style.transform =
+                'translateY(4px)';
+
+
+            setTimeout(
+                () => {
+
+                    status.textContent =
+                        STATES[index].name;
+
+
+                    status.style.opacity =
+                        '1';
+
+
+                    status.style.transform =
+                        'translateY(0)';
+
+                },
+                100
+            );
+
+        }
+
+
+        if (
+            description
+        ) {
+
+            description.classList.add(
+                'is-changing'
+            );
+
+
+            setTimeout(
+                () => {
+
+                    description.textContent =
+                        STATES[index].text;
+
+
+                    description.classList.remove(
+                        'is-changing'
+                    );
+
+                },
+                120
+            );
+
+        }
+
+
+        steps?.forEach(
+            (
+                step,
+                stepIndex
+            ) => {
+
+                step.classList.toggle(
+
+                    'is-active',
+
+                    stepIndex ===
+                    index
+
+                );
+
+            }
+        );
+
+    }
+
+
+    // =================================================
+    // SCROLL
+    // =================================================
+
+    let targetProgress =
+        0;
+
+
+    let smoothProgress =
+        0;
+
+
+    let frameId =
+        null;
+
+
+    function readScroll() {
+
+        const rect =
+            track.getBoundingClientRect();
+
+
+        const available =
+
+            Math.max(
+
+                1,
+
+                track.offsetHeight -
+                window.innerHeight
+
+            );
+
+
+        targetProgress =
+
+            clamp(
+
+                -rect.top /
+                available
+
+            );
+
+
+        startAnimation();
+
+    }
+
+
+    // =================================================
+    // RENDER
+    // =================================================
+
+    function render(
+        progress
+    ) {
+
+        /*
+            Lasciamo un piccolo momento iniziale
+            in cui il pendente rimane completamente pieno.
+
+            Poi parte la "scavatura".
+        */
+
+        const reveal =
+
+            smoothstep(
+
+                (
+                    progress -
+                    0.08
+                )
+
+                /
+
+                0.84
+
+            );
+
+
+        const revealPercent =
+
+            reveal *
+            100;
+
+
+        // =================================================
+        // CLIPPING
+        // =================================================
+
+        object.style.setProperty(
+
+            '--reveal',
+
+            `${revealPercent}%`
+
+        );
+
+
+        // =================================================
+        // SCAN LINE
+        // =================================================
+
+        const scanIn =
+
+            smoothstep(
+
+                progress /
+                0.10
+
+            );
+
+
+        const scanOut =
+
+            1 -
+
+            smoothstep(
+
+                (
+                    progress -
+                    0.88
+                )
+
+                /
+
+                0.08
+
+            );
+
+
+        object.style.setProperty(
+
+            '--scan-opacity',
+
+            String(
+
+                scanIn *
+                scanOut
+
+            )
+
+        );
+
+
+        // =================================================
+        // FRAME
+        // =================================================
+
+        object.style.setProperty(
+
+            '--frame-opacity',
+
+            String(
+
+                0.18 *
+
+                (
+                    1 -
+                    reveal *
+                    0.65
+                )
+
+            )
+
+        );
+
+
+        // =================================================
+        // OBJECT MOVEMENT
+        // =================================================
+
+        const scale =
+
+            0.965 +
+
+            reveal *
+            0.035;
+
+
+        const moveY =
+
+            (
+                reveal -
+                0.5
+            )
+
+            *
+            -6;
+
+
+        object.style.transform =
+
+            `
+                translateY(
+                    ${moveY}px
+                )
+
+                scale(
+                    ${scale}
+                )
+            `;
+
+
+        // =================================================
+        // STATUS
+        // =================================================
+
+        let stateIndex =
+            0;
+
+
+        if (
+            reveal >=
+            0.20
+        ) {
+
+            stateIndex =
+                1;
+
+        }
+
+
+        if (
+            reveal >=
+            0.53
+        ) {
+
+            stateIndex =
+                2;
+
+        }
+
+
+        if (
+            reveal >=
+            0.88
+        ) {
+
+            stateIndex =
+                3;
+
+        }
+
+
+        setState(
+            stateIndex
+        );
+
+
+        // =================================================
+        // PERCENT
+        // =================================================
+
+        if (
+            percent
+        ) {
+
+            percent.textContent =
+
+                `${
+                    String(
+
+                        Math.round(
+                            revealPercent
+                        )
+
+                    )
+                    .padStart(
+                        3,
+                        '0'
+                    )
+                }%`;
+
+        }
+
+    }
+
+
+    // =================================================
+    // SMOOTH ANIMATION
+    // =================================================
+
+    function animate() {
+
+        smoothProgress =
+
+            lerp(
+
+                smoothProgress,
+
+                targetProgress,
+
+                SMOOTHING
+
+            );
+
+
+        render(
+            smoothProgress
+        );
+
+
+        const difference =
+
+            Math.abs(
+
+                targetProgress -
+                smoothProgress
+
+            );
+
+
+        if (
+            difference >
+            0.00025
+        ) {
+
+            frameId =
+
+                requestAnimationFrame(
+                    animate
+                );
+
+        }
+
+        else {
+
+            smoothProgress =
+                targetProgress;
+
+
+            render(
+                smoothProgress
+            );
+
+
+            frameId =
+                null;
+
+        }
+
+    }
+
+
+    function startAnimation() {
+
+        if (
+            frameId !==
+            null
+        ) {
+
+            return;
+
+        }
+
+
+        frameId =
+
+            requestAnimationFrame(
+                animate
+            );
+
+    }
+
+
+    // =================================================
+    // EVENTS
+    // =================================================
+
+    window.addEventListener(
+        'scroll',
+        readScroll,
+        {
+            passive:
+                true
+        }
+    );
+
+
+    window.addEventListener(
+        'resize',
+        readScroll
+    );
+
+
+    // =================================================
+    // INITIAL POSITION
+    // =================================================
+
+    const initialRect =
+        track.getBoundingClientRect();
+
+
+    const initialAvailable =
+
+        Math.max(
+
+            1,
+
+            track.offsetHeight -
+            window.innerHeight
+
+        );
+
+
+    targetProgress =
+
+        clamp(
+
+            -initialRect.top /
+            initialAvailable
+
+        );
+
+
+    smoothProgress =
+        targetProgress;
+
+
+    render(
+        smoothProgress
+    );
+
+})();
+
+// =====================================================
+// NEGATIVE SPACE REVEAL 1
+//
+// 01 WIREFRAME
+// 02 SOLID VOLUME
+// 03 NEGATIVE SPACE
+// 04 FINAL IMAGE
+// =====================================================
+
+(() => {
+
+    const track = document.getElementById('negative-space1');
+    const object = document.getElementById('negativeSpaceObject1');
+    const wireframe = document.getElementById('negativeSpaceWireframe1');
+    const finalImage = document.getElementById('negativeSpaceFinal1');
+    const status = document.getElementById('negativeSpaceStatus1');
+    const percent = document.getElementById('negativeSpacePercent1');
+    const description = document.getElementById('negativeSpaceDescription1');
+
+    if (!track || !object || !wireframe || !finalImage) {
+        return;
+    }
+
+    const SOURCE = 'immagini/pendente2.png';
+    const SMOOTHING = 0.06;
+
+    const clamp = (value, min = 0, max = 1) =>
+        Math.min(max, Math.max(min, value));
+
+    const lerp = (a, b, amount) =>
+        a + (b - a) * amount;
+
+    const sourceImage = new Image();
+    sourceImage.decoding = 'async';
+
+    sourceImage.onload = () => {
+        createWireframe();
+        readScroll();
+    };
+
+    sourceImage.onerror = () => {
+        console.error('Immagine non trovata:', SOURCE);
+    };
+
+    sourceImage.src = SOURCE;
+
+    function createWireframe() {
+        const maxHeight = 580;
+        const ratio = sourceImage.naturalWidth / sourceImage.naturalHeight;
+
+        const h = Math.min(maxHeight, sourceImage.naturalHeight);
+        const w = Math.max(1, Math.round(h * ratio));
+
+        const sourceCanvas = document.createElement('canvas');
+        const sourceCtx = sourceCanvas.getContext('2d', { willReadFrequently: true });
+
+        sourceCanvas.width = w;
+        sourceCanvas.height = h;
+
+        wireframe.width = w;
+        wireframe.height = h;
+
+        sourceCtx.drawImage(sourceImage, 0, 0, w, h);
+
+        const source = sourceCtx.getImageData(0, 0, w, h);
+        const output = sourceCtx.createImageData(w, h);
+
+        const input = source.data;
+        const data = output.data;
+
+        for (let y = 1; y < h - 1; y++) {
+            for (let x = 1; x < w - 1; x++) {
+                const i = (y * w + x) * 4;
+                const alpha = input[i + 3];
+
+                if (alpha < 12) continue;
+
+                const left = (input[i - 4] + input[i - 3] + input[i - 2]) / 3;
+                const right = (input[i + 4] + input[i + 5] + input[i + 6]) / 3;
+
+                const upIndex = i - w * 4;
+                const downIndex = i + w * 4;
+
+                const up = (input[upIndex] + input[upIndex + 1] + input[upIndex + 2]) / 3;
+                const down = (input[downIndex] + input[downIndex + 1] + input[downIndex + 2]) / 3;
+
+                const gx = Math.abs(right - left);
+                const gy = Math.abs(down - up);
+
+                let edge = (gx + gy) * 1.45;
+
+                const alphaLeft = input[i - 1];
+                const alphaRight = input[i + 7];
+                const alphaUp = input[upIndex + 3];
+                const alphaDown = input[downIndex + 3];
+
+                const alphaEdge = Math.max(
+                    Math.abs(alpha - alphaLeft),
+                    Math.abs(alpha - alphaRight),
+                    Math.abs(alpha - alphaUp),
+                    Math.abs(alpha - alphaDown)
+                );
+
+                edge += alphaEdge * 1.45;
+
+                if (edge < 25) continue;
+
+                const strength = clamp(edge / 150);
+
+                data[i] = 205;
+                data[i + 1] = 220;
+                data[i + 2] = 235;
+                data[i + 3] = Math.round(strength * 235);
+            }
+        }
+
+        const ctx = wireframe.getContext('2d');
+        ctx.clearRect(0, 0, w, h);
+        ctx.putImageData(output, 0, 0);
+    }
+
+    let targetProgress = 0;
+    let smoothProgress = 0;
+    let frameId = null;
+
+    function readScroll() {
+        const rect = track.getBoundingClientRect();
+        const available = Math.max(1, track.offsetHeight - window.innerHeight);
+
+        targetProgress = clamp(-rect.top / available);
+        startAnimation();
+    }
+
+    function render(progress) {
+        /*
+            Progress principale:
+            la linea scende da 0% a 100%
+        */
+        const revealProgress = clamp((progress - 0.08) / 0.84);
+
+        object.style.setProperty(
+            '--reveal-progress',
+            `${revealProgress * 100}%`
+        );
+
+        object.style.setProperty(
+            '--scan-opacity',
+            String(revealProgress > 0.01 && revealProgress < 0.995 ? 1 : 0)
+        );
+
+        /*
+            Movimento leggero dell'oggetto
+        */
+        const scale = 0.98 + revealProgress * 0.02;
+        const moveY = (0.5 - revealProgress) * 10;
+
+        object.style.transform = `
+            translateY(${moveY}px)
+            scale(${scale})
+        `;
+
+        /*
+            Wireframe: molto visibile all'inizio,
+            poi cala gradualmente
+        */
+        wireframe.style.opacity = String(1 - revealProgress * 0.35);
+
+        /*
+            Immagine finale: aumenta leggermente anche come look
+        */
+        finalImage.style.filter = `
+            saturate(${0.8 + revealProgress * 0.2})
+            brightness(${0.88 + revealProgress * 0.12})
+            contrast(${1 + revealProgress * 0.05})
+            drop-shadow(
+                0 ${18 + revealProgress * 10}px
+                ${24 + revealProgress * 12}px
+                rgba(0,0,0,${0.18 + revealProgress * 0.08})
+            )
+        `;
+
+        /*
+            Testi di stato
+        */
+        if (status) {
+            if (revealProgress < 0.33) {
+                status.textContent = 'WIREFRAME';
+            } else if (revealProgress < 0.66) {
+                status.textContent = 'TRANSITION';
+            } else if (revealProgress < 0.98) {
+                status.textContent = 'RENDER';
+            } else {
+                status.textContent = 'FINAL OBJECT';
+            }
+        }
+
+        if (description) {
+            if (revealProgress < 0.33) {
+                description.textContent =
+                    'The component starts as a technical drawing.';
+            } else if (revealProgress < 0.66) {
+                description.textContent =
+                    'A vertical scan progressively transforms the drawing into a real object.';
+            } else if (revealProgress < 0.98) {
+                description.textContent =
+                    'The upper area becomes the final rendered component.';
+            } else {
+                description.textContent =
+                    'The transition is complete: the drawing is now a finished object.';
+            }
+        }
+
+        if (percent) {
+            percent.textContent = `${String(Math.round(revealProgress * 100)).padStart(3, '0')}%`;
+        }
+    }
+
+    function animate() {
+        smoothProgress = lerp(smoothProgress, targetProgress, SMOOTHING);
+        render(smoothProgress);
+
+        const difference = Math.abs(targetProgress - smoothProgress);
+
+        if (difference > 0.00025) {
+            frameId = requestAnimationFrame(animate);
+        } else {
+            smoothProgress = targetProgress;
+            render(smoothProgress);
+            frameId = null;
+        }
+    }
+
+    function startAnimation() {
+        if (frameId !== null) return;
+        frameId = requestAnimationFrame(animate);
+    }
+
+    window.addEventListener('scroll', readScroll, { passive: true });
+    window.addEventListener('resize', readScroll);
+
+    readScroll();
+
+})();
