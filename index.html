@@ -79,9 +79,7 @@
 </section>
 
 <section id="layer-build" class="track layer-track">
-
     <div class="stage layer-stage">
-
         <canvas
             id="layerCanvas"
             role="img"
@@ -89,22 +87,18 @@
         </canvas>
 
         <div class="layer-copy">
-
             <p class="kicker">
                 Layer by layer
             </p>
-
             <h2>
                 Built one layer<br>
                 at a time.
             </h2>
-
             <p>
                 Nel Binder Jetting ogni componente nasce
                 attraverso la deposizione progressiva di
                 sottilissimi strati di materiale.
             </p>
-
         </div>
 
         <div class="layer-counter">
@@ -116,105 +110,73 @@
         <div class="layer-scroll-hint">
             Scroll to build
         </div>
-
     </div>
-
 </section>
 
 <section id="bag-material-orbit" class="bag-material-orbit-track">
-
     <div class="bag-material-orbit-stage">
-
         <canvas
             id="bagMaterialOrbitCanvas"
             role="img"
             aria-label="Pendente circondato da diversi materiali metallici selezionabili">
         </canvas>
 
-
         <div class="bag-material-orbit-copy">
-
             <p class="kicker">
                 Material exploration
             </p>
-
             <h2>
                 One component.<br>
                 Different metals.
             </h2>
-
             <p>
                 Seleziona un materiale in orbita
                 e osserva come cambia la superficie
                 del pendente.
             </p>
-
         </div>
-
 
         <div class="bag-material-orbit-status">
-
-            <span>
-                MATERIAL
-            </span>
-
-            <strong id="bagSelectedMaterial">
-                Platinum
-            </strong>
-
-            <small>
-                SELECT TO CHANGE
-            </small>
-
+            <span>MATERIAL</span>
+            <strong id="bagSelectedMaterial">Platinum</strong>
+            <small>SELECT TO CHANGE</small>
         </div>
-
 
         <div class="bag-material-orbit-hint">
             Select a material
         </div>
-
     </div>
-
 </section>
 
 <section id="lattice-pendant" class="lattice-pendant-track">
-
     <div class="lattice-pendant-stage">
-
         <canvas
             id="latticePendantCanvas"
             role="img"
             aria-label="Polvere metallica che si trasforma in un pendente con struttura lattice">
         </canvas>
 
-
         <div class="lattice-pendant-story">
-
             <span
                 id="latticePendantNumber"
                 class="lattice-pendant-number">
                 01
             </span>
-
             <p
                 id="latticePendantKicker"
                 class="kicker">
                 Metal powder
             </p>
-
             <h2 id="latticePendantTitle">
                 It starts<br>
                 with matter.
             </h2>
-
             <p id="latticePendantText">
                 La polvere metallica rappresenta il punto
                 di partenza per una geometria leggera,
                 aperta e strutturalmente sofisticata.
             </p>
-
         </div>
-
 
         <div class="lattice-pendant-dots">
             <i class="is-active"></i>
@@ -223,36 +185,20 @@
             <i></i>
         </div>
 
-
         <div class="lattice-pendant-status">
-
-            <span>
-                PROCESS
-            </span>
-
-            <strong id="latticePendantPhase">
-                POWDER
-            </strong>
-
-            <small id="latticePendantPercent">
-                00%
-            </small>
-
+            <span>PROCESS</span>
+            <strong id="latticePendantPhase">POWDER</strong>
+            <small id="latticePendantPercent">00%</small>
         </div>
-
 
         <div class="lattice-pendant-hint">
             Scroll to manufacture
         </div>
-
     </div>
-
 </section>
 
 <section id="pendant-circle" class="pc-track">
-
     <div class="pc-stage">
-
         <canvas
             id="pcCanvas"
             role="img"
@@ -260,229 +206,125 @@
         </canvas>
 
         <div class="pc-copy">
-
             <p class="kicker">Produzione in serie</p>
-
             <h2>
                 Un pendente,<br>
                 moltiplicato.
             </h2>
-
         </div>
 
         <div class="pc-meta">
             <span id="pcCount">01 / 09</span>
             <span class="pc-hint">Scorri per generare le copie</span>
         </div>
-
     </div>
-
 </section>
 
-<section id="pendant-interactive" class="pendant-interactive"
->
-
+<section id="pendant-interactive" class="pendant-interactive">
     <div class="pendant-interactive-copy">
-
-        <p class="kicker">
-            Interactive object
-        </p>
-
+        <p class="kicker">Interactive object</p>
         <h2>
             Move around<br>
             the object.
         </h2>
-
         <p>
             Muovi il mouse per osservare il pendente
             da diverse angolazioni.
         </p>
-
     </div>
-
 
     <div
         id="pendantInteractiveStage"
-        class="pendant-interactive-stage"
-    >
+        class="pendant-interactive-stage">
 
         <div class="pendant-orbit-circle"></div>
 
-
         <div class="pendant-image-wrap">
-
             <img
                 id="pendantInteractiveImage"
                 src="immagini/pendente-platino.png"
                 alt="Pendente in metallo"
-                draggable="false"
-            >
-
+                draggable="false">
         </div>
-
     </div>
-
 
     <div class="pendant-interactive-data">
-
         <div>
-
-            <span>
-                ROTATION X
-            </span>
-
-            <strong id="pendantRotationX">
-                0°
-            </strong>
-
+            <span>ROTATION X</span>
+            <strong id="pendantRotationX">0°</strong>
         </div>
 
-
         <div>
-
-            <span>
-                ROTATION Y
-            </span>
-
-            <strong id="pendantRotationY">
-                0°
-            </strong>
-
+            <span>ROTATION Y</span>
+            <strong id="pendantRotationY">0°</strong>
         </div>
-
     </div>
-
 
     <div class="pendant-interactive-hint">
         Move your mouse
     </div>
-
 </section>
 
-<section id="surface-finishing" class="surface-finishing"
->
-
+<section id="surface-finishing" class="surface-finishing">
     <div class="surface-finishing-copy">
-
         <p class="kicker">
             Surface finishing
         </p>
-
         <h2>
             From raw metal<br>
             to final finish.
         </h2>
-
         <p>
             Trascina sull'oggetto per passare
             dalla superficie appena prodotta
             alla finitura lucidata.
         </p>
-
     </div>
-
 
     <div
         id="surfaceFinishingStage"
         class="surface-finishing-stage"
-        style="--reveal: 50%;"
-    >
-
-        <!-- =========================================
-             RAW / AS PRINTED
-        ========================================== -->
+        style="--reveal: 50%;">
 
         <img
             class="surface-finishing-image surface-finishing-raw"
             src="immagini/pendente2.png"
             alt=""
-            draggable="false"
-        >
-
-
-        <!-- =========================================
-             POLISHED
-        ========================================== -->
+            draggable="false">
 
         <div class="surface-finishing-polished-wrap">
-
             <img
                 class="surface-finishing-image surface-finishing-polished"
                 src="immagini/pendente2.png"
                 alt="Pendente metallico con confronto tra superficie grezza e lucidata"
-                draggable="false"
-            >
-
+                draggable="false">
         </div>
-
-
-        <!-- =========================================
-             LIGHT / REFLECTION
-        ========================================== -->
 
         <div class="surface-finishing-light"></div>
 
-
-        <!-- =========================================
-             DIVIDER
-        ========================================== -->
-
         <div class="surface-finishing-divider">
-
             <span></span>
-
         </div>
-
-
-        <!-- =========================================
-             LABELS
-        ========================================== -->
 
         <div class="surface-finishing-label surface-finishing-label-left">
-
-            <span>
-                01
-            </span>
-
-            <strong>
-                AS PRINTED
-            </strong>
-
+            <span>01</span>
+            <strong>AS PRINTED</strong>
         </div>
-
 
         <div class="surface-finishing-label surface-finishing-label-right">
-
-            <span>
-                02
-            </span>
-
-            <strong>
-                POLISHED
-            </strong>
-
+            <span>02</span>
+            <strong>POLISHED</strong>
         </div>
-
     </div>
-
 
     <div class="surface-finishing-status">
-
-        <span>
-            FINISH
-        </span>
-
-        <strong id="surfaceFinishingStatus">
-            50%
-        </strong>
-
+        <span>FINISH</span>
+        <strong id="surfaceFinishingStatus">50%</strong>
     </div>
-
 
     <div class="surface-finishing-hint">
         Click + drag to finish
     </div>
-
 </section>
 
 <section id="contatti" class="wrap contact">
