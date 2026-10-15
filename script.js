@@ -10392,3 +10392,1369 @@ stage.addEventListener(
     );
 
 })();
+
+// =====================================================
+// CAD -> RENDER
+//
+// Lightweight version:
+// il wireframe viene calcolato UNA SOLA VOLTA.
+// Durante lo scroll cambiamo solo gli stati visivi.
+// =====================================================
+
+// =====================================================
+// CAD -> RENDER
+// SMOOTH SCROLL VERSION
+// =====================================================
+
+(() => {
+
+    // =================================================
+    // ELEMENTS
+    // =================================================
+
+    const track =
+        document.getElementById(
+            'cad-render'
+        );
+
+    const canvas =
+        document.getElementById(
+            'cadWireframeCanvas'
+        );
+
+    const surface =
+        document.getElementById(
+            'cadSurfaceImage'
+        );
+
+    const finalImage =
+        document.getElementById(
+            'cadFinalImage'
+        );
+
+    const stageLabel =
+        document.getElementById(
+            'cadRenderStage'
+        );
+
+    const percentLabel =
+        document.getElementById(
+            'cadRenderPercent'
+        );
+
+    const description =
+        document.getElementById(
+            'cadRenderDescription'
+        );
+
+    const scan =
+        track?.querySelector(
+            '.cad-render-scan'
+        );
+
+    const grid =
+        track?.querySelector(
+            '.cad-render-grid'
+        );
+
+    const crosshair =
+        track?.querySelector(
+            '.cad-render-crosshair'
+        );
+
+    const object =
+        track?.querySelector(
+            '.cad-render-object'
+        );
+
+    const steps =
+        track?.querySelectorAll(
+            '.cad-render-steps span'
+        );
+
+
+    if (
+        !track ||
+        !canvas ||
+        !surface ||
+        !finalImage
+    ) {
+        return;
+    }
+
+
+    // =================================================
+    // IMAGE
+    // =================================================
+
+    const SOURCE =
+        'immagini/pendente2.png';
+
+
+    const image =
+        new Image();
+
+
+    image.decoding =
+        'async';
+
+
+    // =================================================
+    // UTILITY
+    // =================================================
+
+    const clamp = (
+        value,
+        min = 0,
+        max = 1
+    ) => {
+
+        return Math.min(
+            max,
+            Math.max(
+                min,
+                value
+            )
+        );
+
+    };
+
+
+    const lerp = (
+        a,
+        b,
+        amount
+    ) => {
+
+        return (
+            a +
+            (
+                b -
+                a
+            ) *
+            amount
+        );
+
+    };
+
+
+    const smoothstep = value => {
+
+        const t =
+            clamp(value);
+
+        return (
+            t *
+            t *
+            (
+                3 -
+                2 *
+                t
+            )
+        );
+
+    };
+
+
+    // =================================================
+    // CREATE WIREFRAME
+    // =================================================
+
+    function createWireframe() {
+
+        const sourceCanvas =
+            document.createElement(
+                'canvas'
+            );
+
+
+        const sourceCtx =
+            sourceCanvas.getContext(
+                '2d',
+                {
+                    willReadFrequently:
+                        true
+                }
+            );
+
+
+        const maxHeight =
+            650;
+
+
+        const ratio =
+
+            image.naturalWidth /
+            image.naturalHeight;
+
+
+        const h =
+
+            Math.min(
+                maxHeight,
+                image.naturalHeight
+            );
+
+
+        const w =
+
+            Math.round(
+                h *
+                ratio
+            );
+
+
+        sourceCanvas.width =
+            w;
+
+        sourceCanvas.height =
+            h;
+
+
+        canvas.width =
+            w;
+
+        canvas.height =
+            h;
+
+
+        sourceCtx.drawImage(
+            image,
+            0,
+            0,
+            w,
+            h
+        );
+
+
+        const source =
+
+            sourceCtx.getImageData(
+                0,
+                0,
+                w,
+                h
+            );
+
+
+        const output =
+
+            sourceCtx.createImageData(
+                w,
+                h
+            );
+
+
+        const input =
+            source.data;
+
+
+        const data =
+            output.data;
+
+
+        // =================================================
+        // EDGE DETECTION
+        // =================================================
+
+        for (
+            let y = 1;
+            y < h - 1;
+            y++
+        ) {
+
+            for (
+                let x = 1;
+                x < w - 1;
+                x++
+            ) {
+
+                const i =
+
+                    (
+                        y *
+                        w +
+                        x
+                    )
+
+                    *
+                    4;
+
+
+                const alpha =
+                    input[
+                        i + 3
+                    ];
+
+
+                if (
+                    alpha < 20
+                ) {
+                    continue;
+                }
+
+
+                const left =
+
+                    (
+                        input[i - 4] +
+                        input[i - 3] +
+                        input[i - 2]
+                    )
+
+                    /
+
+                    3;
+
+
+                const right =
+
+                    (
+                        input[i + 4] +
+                        input[i + 5] +
+                        input[i + 6]
+                    )
+
+                    /
+
+                    3;
+
+
+                const upIndex =
+
+                    i -
+                    w *
+                    4;
+
+
+                const downIndex =
+
+                    i +
+                    w *
+                    4;
+
+
+                const up =
+
+                    (
+                        input[upIndex] +
+                        input[upIndex + 1] +
+                        input[upIndex + 2]
+                    )
+
+                    /
+
+                    3;
+
+
+                const down =
+
+                    (
+                        input[downIndex] +
+                        input[downIndex + 1] +
+                        input[downIndex + 2]
+                    )
+
+                    /
+
+                    3;
+
+
+                const gx =
+                    Math.abs(
+                        right -
+                        left
+                    );
+
+
+                const gy =
+                    Math.abs(
+                        down -
+                        up
+                    );
+
+
+                let edge =
+
+                    (
+                        gx +
+                        gy
+                    )
+
+                    *
+                    1.35;
+
+
+                const alphaLeft =
+                    input[i - 1];
+
+
+                const alphaRight =
+                    input[i + 7];
+
+
+                const alphaUp =
+                    input[
+                        upIndex + 3
+                    ];
+
+
+                const alphaDown =
+                    input[
+                        downIndex + 3
+                    ];
+
+
+                const alphaEdge =
+
+                    Math.max(
+
+                        Math.abs(
+                            alpha -
+                            alphaLeft
+                        ),
+
+                        Math.abs(
+                            alpha -
+                            alphaRight
+                        ),
+
+                        Math.abs(
+                            alpha -
+                            alphaUp
+                        ),
+
+                        Math.abs(
+                            alpha -
+                            alphaDown
+                        )
+
+                    );
+
+
+                edge +=
+                    alphaEdge *
+                    1.4;
+
+
+                if (
+                    edge < 28
+                ) {
+                    continue;
+                }
+
+
+                const strength =
+
+                    clamp(
+                        edge /
+                        160
+                    );
+
+
+                data[i] =
+                    205;
+
+
+                data[i + 1] =
+                    220;
+
+
+                data[i + 2] =
+                    235;
+
+
+                data[i + 3] =
+
+                    Math.round(
+                        strength *
+                        235
+                    );
+
+            }
+
+        }
+
+
+        const ctx =
+            canvas.getContext(
+                '2d'
+            );
+
+
+        ctx.clearRect(
+            0,
+            0,
+            w,
+            h
+        );
+
+
+        ctx.putImageData(
+            output,
+            0,
+            0
+        );
+
+    }
+
+
+    image.onload =
+        createWireframe;
+
+
+    image.onerror =
+        () => {
+
+            console.error(
+                'CAD Render: immagine non trovata',
+                SOURCE
+            );
+
+        };
+
+
+    image.src =
+        SOURCE;
+
+
+    // =================================================
+    // STATES
+    // =================================================
+
+    const STATES = [
+
+        {
+            name:
+                'WIREFRAME',
+
+            text:
+                'Everything starts from geometry.'
+        },
+
+        {
+            name:
+                'SURFACE',
+
+            text:
+                'The digital model becomes a continuous surface.'
+        },
+
+        {
+            name:
+                'MATERIAL',
+
+            text:
+                'Material properties are applied to the geometry.'
+        },
+
+        {
+            name:
+                'FINAL RENDER',
+
+            text:
+                'The digital object becomes a finished metal component.'
+        }
+
+    ];
+
+
+    let currentState =
+        0;
+
+
+    // =================================================
+    // TEXT CHANGE
+    // =================================================
+
+    function setState(
+        index
+    ) {
+
+        if (
+            index === currentState
+        ) {
+            return;
+        }
+
+
+        currentState =
+            index;
+
+
+        if (
+            stageLabel
+        ) {
+
+            stageLabel.style.opacity =
+                '0';
+
+
+            stageLabel.style.transform =
+                'translateY(4px)';
+
+
+            setTimeout(
+                () => {
+
+                    stageLabel.textContent =
+                        STATES[index].name;
+
+
+                    stageLabel.style.opacity =
+                        '1';
+
+
+                    stageLabel.style.transform =
+                        'translateY(0)';
+
+                },
+                110
+            );
+
+        }
+
+
+        if (
+            description
+        ) {
+
+            description.classList.add(
+                'is-changing'
+            );
+
+
+            setTimeout(
+                () => {
+
+                    description.textContent =
+                        STATES[index].text;
+
+
+                    description.classList.remove(
+                        'is-changing'
+                    );
+
+                },
+                130
+            );
+
+        }
+
+
+        steps?.forEach(
+            (
+                step,
+                stepIndex
+            ) => {
+
+                step.classList.toggle(
+
+                    'is-active',
+
+                    stepIndex ===
+                    index
+
+                );
+
+            }
+        );
+
+    }
+
+
+    // =================================================
+    // SCROLL PROGRESS
+    // =================================================
+
+    let targetProgress =
+        0;
+
+
+    let smoothProgress =
+        0;
+
+
+    let animationFrame =
+        null;
+
+
+    const SMOOTHING =
+        0.035;
+
+
+    function readScroll() {
+
+        const rect =
+            track.getBoundingClientRect();
+
+
+        const distance =
+
+            Math.max(
+
+                1,
+
+                track.offsetHeight -
+                window.innerHeight
+
+            );
+
+
+        targetProgress =
+
+            clamp(
+
+                -rect.top /
+                distance
+
+            );
+
+
+        startAnimation();
+
+    }
+
+
+    // =================================================
+    // RENDER
+    // =================================================
+
+    function render(
+        progress
+    ) {
+
+        // =================================================
+        // PHASE PROGRESS
+        // =================================================
+
+        const surfaceProgress =smoothstep((progress -0.08) / 0.42);
+        const materialProgress = smoothstep((progress - 0.32) / 0.44);
+        const finalProgress = smoothstep((progress - 0.61) / 0.37);
+
+        // =================================================
+        // WIREFRAME
+        // =================================================
+
+        const wireOpacity =
+
+            1 -
+
+            finalProgress *
+            0.92;
+
+
+        canvas.style.opacity =
+
+            String(
+                wireOpacity
+            );
+
+        const wireScale =
+
+            1 +
+
+            surfaceProgress *
+            0.018;
+
+
+        canvas.style.transform =
+
+            `
+                translate(-50%, -50%)
+                scale(${wireScale})
+            `;
+
+
+        canvas.style.filter =
+
+            `
+                drop-shadow(
+                    0 0 ${
+                        5 +
+                        surfaceProgress *
+                        7
+                    }px
+                    rgba(
+                        210,
+                        225,
+                        240,
+                        ${
+                            0.09 +
+                            surfaceProgress *
+                            0.05
+                        }
+                    )
+                )
+            `;
+
+
+        // =================================================
+        // SURFACE
+        // =================================================
+
+        const surfaceOpacity =
+
+            surfaceProgress *
+
+            (
+                1 -
+                materialProgress *
+                0.88
+            );
+
+        surface.style.opacity =
+
+            String(
+                surfaceOpacity
+            );
+
+
+        const surfaceScale =
+
+            0.985 +
+
+            surfaceProgress *
+            0.025;
+
+
+        surface.style.transform =
+
+            `
+                translate(-50%, -50%)
+                scale(${surfaceScale})
+            `;
+
+
+        // =================================================
+        // GOLD
+        // =================================================
+
+        const goldOpacity =
+
+            Math.max(
+
+                materialProgress *
+                0.78,
+
+                finalProgress
+
+            );
+
+
+        finalImage.style.opacity =
+
+            String(
+                goldOpacity
+            );
+
+
+        /*
+            Leggerissima crescita durante
+            il passaggio al render finale.
+        */
+
+        const finalScale =
+
+            0.985 +
+
+            finalProgress *
+            0.025;
+
+
+        const finalRotation =
+
+            (
+                materialProgress -
+                0.5
+            )
+
+            *
+
+            0.8;
+
+
+        finalImage.style.transform =
+
+            `
+                translate(-50%, -50%)
+                scale(${finalScale})
+                rotate(${finalRotation}deg)
+            `;
+
+
+        finalImage.style.filter =
+
+            `
+                saturate(${
+                    0.64 +
+                    materialProgress *
+                    0.20 +
+                    finalProgress *
+                    0.28
+                })
+
+                brightness(${
+                    0.76 +
+                    materialProgress *
+                    0.10 +
+                    finalProgress *
+                    0.18
+                })
+
+                contrast(${
+                    1.12 -
+                    finalProgress *
+                    0.07
+                })
+
+                drop-shadow(
+                    0
+                    ${
+                        16 +
+                        finalProgress *
+                        14
+                    }px
+                    ${
+                        20 +
+                        finalProgress *
+                        16
+                    }px
+                    rgba(
+                        0,
+                        0,
+                        0,
+                        ${
+                            0.18 +
+                            finalProgress *
+                            0.12
+                        }
+                    )
+                )
+            `;
+
+
+        // =================================================
+        // OBJECT MOVEMENT
+        // =================================================
+
+        if (
+            object
+        ) {
+
+            /*
+                Un movimento verticale molto piccolo
+                evita l'effetto "slide PowerPoint".
+            */
+
+            const moveY =
+
+                (
+                    progress -
+                    0.5
+                )
+
+                *
+
+                -10;
+
+
+            object.style.transform =
+
+                `
+                    translate(
+                        -50%,
+                        -50%
+                    )
+
+                    translateY(
+                        ${moveY}px
+                    )
+                `;
+
+        }
+
+
+        // =================================================
+        // GRID
+        // =================================================
+
+        if (
+            grid
+        ) {
+
+            /*
+                Il CAD grid sparisce lentamente
+                mentre l'oggetto diventa reale.
+            */
+
+            grid.style.opacity =
+
+                String(
+
+                    0.22 *
+
+                    (
+                        1 -
+                        finalProgress *
+                        0.85
+                    )
+
+                );
+
+
+            grid.style.transform =
+
+                `
+                    scale(${
+                        1 +
+                        progress *
+                        0.025
+                    })
+                `;
+
+        }
+
+
+        // =================================================
+        // CROSSHAIR
+        // =================================================
+
+        if (
+            crosshair
+        ) {
+
+            crosshair.style.opacity =
+
+                String(
+
+                    0.18 *
+
+                    (
+                        1 -
+                        finalProgress *
+                        0.90
+                    )
+
+                );
+
+        }
+
+
+        // =================================================
+        // SCAN LINE
+        // =================================================
+
+        if (
+            scan
+        ) {
+
+            const scanProgress =
+
+                smoothstep(
+
+                    (
+                        progress -
+                        0.08
+                    )
+
+                    /
+
+                    0.72
+
+                );
+
+
+            const scanY =
+
+                92 -
+
+                scanProgress *
+                84;
+
+
+            scan.style.top =
+
+                `${scanY}%`;
+
+
+            /*
+                Fade morbido in entrata/uscita.
+            */
+
+            const scanIn =
+
+                smoothstep(
+
+                    progress /
+                    0.10
+
+                );
+
+
+            const scanOut =
+
+                1 -
+
+                smoothstep(
+
+                    (
+                        progress -
+                        0.75
+                    )
+
+                    /
+
+                    0.12
+
+                );
+
+
+            scan.style.opacity =
+
+                String(
+
+                    scanIn *
+                    scanOut
+
+                );
+
+        }
+
+
+        // =================================================
+        // CURRENT STATE
+        // =================================================
+
+        let stateIndex =
+            0;
+
+
+        if (
+            progress >= 0.25
+        ) {
+
+            stateIndex =
+                1;
+
+        }
+
+
+        if (
+            progress >= 0.50
+        ) {
+
+            stateIndex =
+                2;
+
+        }
+
+
+        if (
+            progress >= 0.76
+        ) {
+
+            stateIndex =
+                3;
+
+        }
+
+
+        setState(
+            stateIndex
+        );
+
+
+        // =================================================
+        // PERCENTAGE
+        // =================================================
+
+        if (
+            percentLabel
+        ) {
+
+            percentLabel.textContent =
+
+                `${
+                    String(
+
+                        Math.round(
+                            progress *
+                            100
+                        )
+
+                    )
+                    .padStart(
+                        3,
+                        '0'
+                    )
+                }%`;
+
+        }
+
+    }
+
+
+    // =================================================
+    // SMOOTH ANIMATION
+    // =================================================
+
+    function animate() {
+
+        /*
+            Invece di saltare immediatamente
+            alla posizione dello scroll,
+            inseguiamo progressivamente
+            il nuovo valore.
+        */
+
+        smoothProgress =
+
+            lerp(
+
+                smoothProgress,
+
+                targetProgress,
+
+                SMOOTHING
+
+            );
+
+
+        render(
+            smoothProgress
+        );
+
+
+        const difference =
+
+            Math.abs(
+
+                targetProgress -
+                smoothProgress
+
+            );
+
+
+        /*
+            Continuiamo ad animare solo finché
+            serve davvero.
+
+            Quindi NON abbiamo un loop infinito
+            che consuma CPU.
+        */
+
+        if (
+            difference >
+            0.0003
+        ) {
+
+            animationFrame =
+
+                requestAnimationFrame(
+                    animate
+                );
+
+        }
+
+        else {
+
+            smoothProgress =
+                targetProgress;
+
+
+            render(
+                smoothProgress
+            );
+
+
+            animationFrame =
+                null;
+
+        }
+
+    }
+
+
+    function startAnimation() {
+
+        if (
+            animationFrame !==
+            null
+        ) {
+            return;
+        }
+
+
+        animationFrame =
+
+            requestAnimationFrame(
+                animate
+            );
+
+    }
+
+
+    // =================================================
+    // EVENTS
+    // =================================================
+
+    window.addEventListener(
+        'scroll',
+        readScroll,
+        {
+            passive:
+                true
+        }
+    );
+
+
+    window.addEventListener(
+        'resize',
+        () => {
+
+            readScroll();
+
+        }
+    );
+
+
+    // =================================================
+    // INITIAL POSITION
+    // =================================================
+
+    const initialRect =
+        track.getBoundingClientRect();
+
+
+    const initialDistance =
+
+        Math.max(
+
+            1,
+
+            track.offsetHeight -
+            window.innerHeight
+
+        );
+
+
+    targetProgress =
+
+        clamp(
+
+            -initialRect.top /
+            initialDistance
+
+        );
+
+
+    smoothProgress =
+        targetProgress;
+
+
+    render(
+        smoothProgress
+    );
+
+})();

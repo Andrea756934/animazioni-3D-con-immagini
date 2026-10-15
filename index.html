@@ -327,6 +327,129 @@
     </div>
 </section>
 
+<section
+    id="cad-render"
+    class="cad-render-track"
+>
+
+    <div class="cad-render-stage">
+
+        <div class="cad-render-copy">
+
+            <p class="kicker">
+                Digital manufacturing
+            </p>
+
+            <h2>
+                From digital model<br>
+                to physical object.
+            </h2>
+
+            <p id="cadRenderDescription">
+                Everything starts from geometry.
+            </p>
+
+        </div>
+
+
+        <div class="cad-render-object">
+
+            <!-- TECHNICAL GRID -->
+
+            <div class="cad-render-grid"></div>
+
+
+            <!-- CAD / WIREFRAME -->
+
+            <canvas
+                id="cadWireframeCanvas"
+                class="cad-render-layer cad-render-wireframe"
+            ></canvas>
+
+
+            <!-- GREY SURFACE -->
+
+            <img
+                id="cadSurfaceImage"
+                class="cad-render-layer cad-render-surface"
+                src="immagini/pendente2.png"
+                alt=""
+                draggable="false"
+            >
+
+
+            <!-- FINAL GOLD -->
+
+            <img
+                id="cadFinalImage"
+                class="cad-render-layer cad-render-final"
+                src="immagini/pendente2.png"
+                alt="Pendente in oro"
+                draggable="false"
+            >
+
+
+            <!-- SCAN LINE -->
+
+            <div class="cad-render-scan"></div>
+
+
+            <!-- CROSSHAIR -->
+
+            <div class="cad-render-crosshair">
+                <span></span>
+                <i></i>
+            </div>
+
+        </div>
+
+
+        <div class="cad-render-status">
+
+            <span>
+                STAGE
+            </span>
+
+            <strong id="cadRenderStage">
+                WIREFRAME
+            </strong>
+
+            <small id="cadRenderPercent">
+                000%
+            </small>
+
+        </div>
+
+
+        <div class="cad-render-steps">
+
+            <span class="is-active">
+                01
+            </span>
+
+            <span>
+                02
+            </span>
+
+            <span>
+                03
+            </span>
+
+            <span>
+                04
+            </span>
+
+        </div>
+
+
+        <div class="cad-render-hint">
+            Scroll to develop
+        </div>
+
+    </div>
+
+</section>
+
 <section id="contatti" class="wrap contact">
   <h2>Richiedi informazioni sul 3D Metal Hub</h2>
   <p>Racconta il tuo progetto: ti risponderemo con tempi e materiali possibili. (Qui va inserito il modulo o l'indirizzo email reale.)</p>
