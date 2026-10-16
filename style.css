@@ -4305,3 +4305,363 @@ footer {
         transform: none;
     }
 }
+
+/* =====================================================
+   DEPTH TUNNEL
+===================================================== */
+
+.depth-tunnel-track {
+    position: relative;
+
+    height: 620vh;
+
+    border-top:
+        1px solid
+        var(--line);
+}
+
+
+.depth-tunnel-stage {
+    position: sticky;
+
+    top: 0;
+
+    height: 100svh;
+
+    overflow: hidden;
+
+    background:
+        var(--bg);
+
+    color:
+        var(--fg);
+}
+
+
+/* =====================================================
+   CANVAS
+===================================================== */
+
+#depthTunnelCanvas {
+    position: absolute;
+
+    inset: 0;
+
+    z-index: 1;
+
+    width: 100%;
+    height: 100%;
+
+    display: block;
+}
+
+
+/* =====================================================
+   COPY
+===================================================== */
+
+.depth-tunnel-copy {
+    position: absolute;
+
+    top: 50%;
+    left: 7vw;
+
+    z-index: 3;
+
+    width:
+        min(
+            28rem,
+            31vw
+        );
+
+    transform:
+        translateY(-50%);
+
+    pointer-events:
+        none;
+}
+
+
+.depth-tunnel-copy h2 {
+    margin:
+        0
+        0
+        1.3rem;
+
+    font-size:
+        clamp(
+            2.8rem,
+            5vw,
+            5.6rem
+        );
+
+    line-height:
+        .94;
+
+    font-weight:
+        300;
+
+    letter-spacing:
+        -.04em;
+}
+
+
+.depth-tunnel-copy > p:last-child {
+    max-width:
+        23rem;
+
+    margin:
+        0;
+
+    color:
+        var(--mut);
+
+    line-height:
+        1.65;
+}
+
+
+/* =====================================================
+   STATUS
+===================================================== */
+
+.depth-tunnel-status {
+    position: absolute;
+
+    top: 12vh;
+    right: 4vw;
+
+    z-index: 3;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: flex-end;
+
+    pointer-events:
+        none;
+}
+
+
+.depth-tunnel-status > span {
+    color:
+        var(--mut);
+
+    font-size:
+        .58rem;
+
+    letter-spacing:
+        .18em;
+}
+
+
+#depthTunnelName {
+    margin-top:
+        .25rem;
+
+    color:
+        var(--fg);
+
+    font-size:
+        1.2rem;
+
+    font-weight:
+        300;
+
+    letter-spacing:
+        .08em;
+}
+
+
+#depthTunnelCount {
+    margin-top:
+        .15rem;
+
+    color:
+        var(--mut);
+
+    font-size:
+        .68rem;
+
+    letter-spacing:
+        .1em;
+}
+
+
+/* =====================================================
+   DEPTH INDICATOR
+===================================================== */
+
+.depth-tunnel-depth {
+    position: absolute;
+
+    right: 4vw;
+    top: 50%;
+
+    z-index: 3;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    gap:
+        .8rem;
+
+    transform:
+        translateY(-50%);
+
+    color:
+        var(--mut);
+
+    font-size:
+        .52rem;
+
+    letter-spacing:
+        .16em;
+
+    pointer-events:
+        none;
+}
+
+
+.depth-tunnel-depth i {
+    display: block;
+
+    width:
+        1px;
+
+    height:
+        120px;
+
+    background:
+
+        linear-gradient(
+            to bottom,
+
+            transparent,
+
+            var(--mut),
+
+            transparent
+        );
+
+    opacity:
+        .45;
+}
+
+
+/* =====================================================
+   HINT
+===================================================== */
+
+.depth-tunnel-hint {
+    position: absolute;
+
+    left: 50%;
+    bottom: 4vh;
+
+    z-index: 3;
+
+    transform:
+        translateX(-50%);
+
+    color:
+        var(--mut);
+
+    font-size:
+        .68rem;
+
+    text-transform:
+        uppercase;
+
+    letter-spacing:
+        .16em;
+
+    pointer-events:
+        none;
+}
+
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media (max-width: 700px) {
+
+    .depth-tunnel-track {
+        height:
+            520vh;
+    }
+
+
+    .depth-tunnel-copy {
+        top:
+            6rem;
+
+        left:
+            6vw;
+
+        right:
+            6vw;
+
+        width:
+            auto;
+
+        transform:
+            none;
+    }
+
+
+    .depth-tunnel-copy h2 {
+        font-size:
+
+            clamp(
+                2.3rem,
+                10vw,
+                3.7rem
+            );
+    }
+
+
+    .depth-tunnel-copy > p:last-child {
+        max-width:
+            88%;
+
+        font-size:
+            .92rem;
+    }
+
+
+    .depth-tunnel-status {
+        top:
+            auto;
+
+        right:
+            6vw;
+
+        bottom:
+            9vh;
+    }
+
+
+    .depth-tunnel-depth {
+        display:
+            none;
+    }
+
+
+    .depth-tunnel-hint {
+        left:
+            6vw;
+
+        bottom:
+            3vh;
+
+        transform:
+            none;
+    }
+
+}

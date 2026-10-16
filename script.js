@@ -13299,3 +13299,1372 @@ stage.addEventListener(
     readScroll();
 
 })();
+
+// =====================================================
+// DEPTH TUNNEL
+//
+// I prodotti arrivano dalla profondità,
+// diventano progressivamente più grandi e nitidi,
+// attraversano la camera e lasciano spazio
+// al prodotto successivo.
+// =====================================================
+
+// =====================================================
+// DEPTH TUNNEL — OPTIMIZED
+//
+// I prodotti arrivano dalla profondità,
+// diventano progressivamente più grandi,
+// attraversano la camera e lasciano spazio
+// al prodotto successivo.
+// =====================================================
+
+(() => {
+
+    // =================================================
+    // ELEMENTS
+    // =================================================
+
+    const track =
+        document.getElementById(
+            'depth-tunnel'
+        );
+
+
+    const canvas =
+        document.getElementById(
+            'depthTunnelCanvas'
+        );
+
+
+    const nameElement =
+        document.getElementById(
+            'depthTunnelName'
+        );
+
+
+    const countElement =
+        document.getElementById(
+            'depthTunnelCount'
+        );
+
+
+    if (
+        !track ||
+        !canvas
+    ) {
+        return;
+    }
+
+
+    const ctx =
+        canvas.getContext('2d');
+
+
+    // =================================================
+    // PRODUCTS
+    // =================================================
+
+    const products = [
+
+        {
+            name: 'Platino',
+            image:
+                'immagini/pendente-platino.png'
+        },
+
+        {
+            name: 'Titanio',
+            image:
+                'immagini/pendente-metallo.png'
+        },
+
+        {
+            name: 'Oro',
+            image:
+                'immagini/pendente2.png'
+        },
+
+        {
+            name: 'Acciaio',
+            image:
+                'immagini/pendente-argento.png'
+        },
+
+        {
+            name: 'Bronzo',
+            image:
+                'immagini/pendente-bronzo.png'
+        },
+
+        {
+            name: 'Argento',
+            image:
+                'immagini/pendente-ferro.png'
+        }
+
+    ];
+
+
+    const total =
+        products.length;
+
+
+    // =================================================
+    // SETTINGS
+    // =================================================
+
+    const DEPTH_GAP =
+        1.25;
+
+
+    const FOCUS_Z =
+        1.55;
+
+
+    const FOCAL_LENGTH =
+        1.40;
+
+
+    const SMOOTHING =
+        0.065;
+
+
+    // =================================================
+    // UTILITY
+    // =================================================
+
+    const clamp = (
+        value,
+        min = 0,
+        max = 1
+    ) => {
+
+        return Math.min(
+            max,
+            Math.max(
+                min,
+                value
+            )
+        );
+
+    };
+
+
+    const lerp = (
+        a,
+        b,
+        amount
+    ) => {
+
+        return (
+            a +
+            (
+                b - a
+            ) *
+            amount
+        );
+
+    };
+
+
+    // =================================================
+    // IMAGES
+    // =================================================
+
+    const images =
+
+        products.map(
+            product => {
+
+                const image =
+                    new Image();
+
+
+                image.decoding =
+                    'async';
+
+
+                image.src =
+                    product.image;
+
+
+                image.onerror =
+                    () => {
+
+                        console.warn(
+                            'Depth Tunnel image missing:',
+                            product.image
+                        );
+
+                    };
+
+
+                return image;
+
+            }
+        );
+
+
+    // =================================================
+    // CANVAS
+    // =================================================
+
+    let width;
+    let height;
+    let dpr;
+
+
+    let mobile =
+        window.innerWidth < 700;
+
+
+    function resizeCanvas() {
+
+        mobile =
+            window.innerWidth < 700;
+
+
+        /*
+            DPR limitato.
+
+            Retina a 2x/3x rendeva il canvas
+            inutilmente pesante.
+        */
+
+        dpr =
+
+            Math.min(
+                window.devicePixelRatio || 1,
+                mobile
+                    ? 1
+                    : 1.25
+            );
+
+
+        width =
+
+            canvas.width =
+
+                Math.round(
+                    window.innerWidth *
+                    dpr
+                );
+
+
+        height =
+
+            canvas.height =
+
+                Math.round(
+                    window.innerHeight *
+                    dpr
+                );
+
+
+        canvas.style.width =
+            `${window.innerWidth}px`;
+
+
+        canvas.style.height =
+            `${window.innerHeight}px`;
+
+    }
+
+
+    window.addEventListener(
+        'resize',
+        resizeCanvas
+    );
+
+
+    resizeCanvas();
+
+
+    // =================================================
+    // SCROLL
+    // =================================================
+
+    let progress =
+        0;
+
+
+    let smoothProgress =
+        0;
+
+
+    function readScroll() {
+
+        const rect =
+
+            track
+                .getBoundingClientRect();
+
+
+        const available =
+
+            Math.max(
+
+                1,
+
+                track.offsetHeight -
+                window.innerHeight
+
+            );
+
+
+        progress =
+
+            clamp(
+
+                -rect.top /
+                available
+
+            );
+
+    }
+
+
+    window.addEventListener(
+        'scroll',
+        readScroll,
+        {
+            passive: true
+        }
+    );
+
+
+    window.addEventListener(
+        'resize',
+        readScroll
+    );
+
+
+    readScroll();
+
+
+    // =================================================
+    // REDUCED MOTION
+    // =================================================
+
+    const reduceMotion =
+
+        window
+            .matchMedia(
+                '(prefers-reduced-motion: reduce)'
+            )
+            .matches;
+
+
+    // =================================================
+    // BACKGROUND TUNNEL
+    // =================================================
+
+    function drawTunnel(
+        travel
+    ) {
+
+        const centerX =
+            width / 2;
+
+
+        const centerY =
+            height * 0.5;
+
+
+        ctx.save();
+
+
+        // =============================================
+        // RADIAL LINES
+        // =============================================
+
+        const lineCount =
+            8;
+
+
+        const outer =
+
+            Math.max(
+                width,
+                height
+            )
+
+            *
+
+            0.75;
+
+
+        ctx.lineWidth =
+            1 * dpr;
+
+
+        ctx.strokeStyle =
+            'rgba(150,155,165,.045)';
+
+
+        for (
+            let i = 0;
+            i < lineCount;
+            i++
+        ) {
+
+            const angle =
+
+                (
+                    Math.PI *
+                    2 *
+                    i
+                )
+
+                /
+
+                lineCount;
+
+
+            const x =
+
+                centerX +
+
+                Math.cos(
+                    angle
+                )
+
+                *
+
+                outer;
+
+
+            const y =
+
+                centerY +
+
+                Math.sin(
+                    angle
+                )
+
+                *
+
+                outer
+
+                *
+
+                0.58;
+
+
+            ctx.beginPath();
+
+
+            ctx.moveTo(
+                centerX,
+                centerY
+            );
+
+
+            ctx.lineTo(
+                x,
+                y
+            );
+
+
+            ctx.stroke();
+
+        }
+
+
+        // =============================================
+        // DEPTH RINGS
+        // =============================================
+
+        const ringCount =
+            7;
+
+
+        for (
+            let i = 0;
+            i < ringCount;
+            i++
+        ) {
+
+            const phase =
+
+                (
+                    i /
+                    ringCount
+
+                    +
+
+                    travel *
+                    0.18
+                )
+
+                %
+
+                1;
+
+
+            const normalizedPhase =
+
+                phase < 0
+                    ? phase + 1
+                    : phase;
+
+
+            const eased =
+
+                normalizedPhase *
+                normalizedPhase;
+
+
+            const radius =
+
+                lerp(
+
+                    15 * dpr,
+
+                    Math.max(
+                        width,
+                        height
+                    )
+
+                    *
+
+                    0.68,
+
+                    eased
+
+                );
+
+
+            ctx.beginPath();
+
+
+            ctx.ellipse(
+
+                centerX,
+                centerY,
+
+                radius,
+
+                radius *
+                0.58,
+
+                0,
+
+                0,
+
+                Math.PI *
+                2
+
+            );
+
+
+            ctx.strokeStyle =
+
+                `rgba(
+                    150,
+                    155,
+                    165,
+                    ${
+                        0.018 +
+                        normalizedPhase *
+                        0.055
+                    }
+                )`;
+
+
+            ctx.stroke();
+
+        }
+
+
+        ctx.restore();
+
+    }
+
+
+    // =================================================
+    // PRODUCT DATA
+    // =================================================
+
+    function getProductData(
+        index,
+        travel,
+        time
+    ) {
+
+        const image =
+            images[index];
+
+
+        if (
+            !image ||
+            !image.complete ||
+            !image.naturalWidth
+        ) {
+            return null;
+        }
+
+
+        // =============================================
+        // DEPTH
+        // =============================================
+
+        const relative =
+
+            index -
+            travel;
+
+
+        const z =
+
+            FOCUS_Z +
+
+            relative *
+            DEPTH_GAP;
+
+
+        /*
+            Ha già attraversato
+            la camera.
+        */
+
+        if (
+            z <= 0.18
+        ) {
+            return null;
+        }
+
+
+        /*
+            Troppo lontano.
+        */
+
+        if (
+            z > 7
+        ) {
+            return null;
+        }
+
+
+        // =============================================
+        // PERSPECTIVE
+        // =============================================
+
+        const perspective =
+
+            clamp(
+
+                FOCAL_LENGTH /
+                z,
+
+                0.08,
+
+                3.4
+
+            );
+
+
+        const baseHeight =
+
+            Math.min(
+                width,
+                height
+            )
+
+            *
+
+            (
+                mobile
+                    ? 0.43
+                    : 0.50
+            );
+
+
+        const imageHeight =
+
+            baseHeight *
+            perspective;
+
+
+        const ratio =
+
+            image.naturalWidth /
+            image.naturalHeight;
+
+
+        const imageWidth =
+
+            imageHeight *
+            ratio;
+
+
+        // =============================================
+        // POSITION
+        // =============================================
+
+        const farFactor =
+
+            clamp(
+
+                (
+                    z -
+                    1.15
+                )
+
+                /
+
+                4
+
+            );
+
+
+        const angle =
+
+            index *
+            2.15;
+
+
+        const orbitRadius =
+
+            Math.min(
+                width,
+                height
+            )
+
+            *
+
+            0.13;
+
+
+        const x =
+
+            width / 2 +
+
+            Math.cos(
+                angle
+            )
+
+            *
+
+            orbitRadius
+
+            *
+
+            farFactor;
+
+
+        const floatY =
+
+            reduceMotion
+
+                ? 0
+
+                : Math.sin(
+
+                    time *
+                    0.65 +
+
+                    index *
+                    1.4
+
+                )
+
+                *
+
+                5 *
+                dpr;
+
+
+        const y =
+
+            height *
+            0.50
+
+            +
+
+            Math.sin(
+                angle
+            )
+
+            *
+
+            orbitRadius
+
+            *
+
+            0.55
+
+            *
+
+            farFactor
+
+            +
+
+            floatY;
+
+
+        // =============================================
+        // OPACITY
+        // =============================================
+
+        const farAlpha =
+
+            clamp(
+
+                (
+                    6 -
+                    z
+                )
+
+                /
+
+                3.8
+
+            );
+
+
+        const nearAlpha =
+
+            clamp(
+
+                (
+                    z -
+                    0.20
+                )
+
+                /
+
+                0.42
+
+            );
+
+
+        const alpha =
+
+            farAlpha *
+            nearAlpha;
+
+
+        /*
+            Evitiamo anche il drawImage
+            quando è praticamente invisibile.
+        */
+
+        if (
+            alpha <= 0.01
+        ) {
+            return null;
+        }
+
+
+        // =============================================
+        // ROTATION
+        // =============================================
+
+        const rotationStrength =
+
+            clamp(
+
+                (
+                    z -
+                    1
+                )
+
+                /
+
+                4
+
+            );
+
+
+        const rotation =
+
+            (
+                index % 2 === 0
+                    ? -1
+                    : 1
+            )
+
+            *
+
+            0.07
+
+            *
+
+            rotationStrength
+
+            +
+
+            (
+                reduceMotion
+
+                    ? 0
+
+                    : Math.sin(
+
+                        time *
+                        0.35 +
+
+                        index
+
+                    )
+
+                    *
+
+                    0.008
+            );
+
+
+        return {
+
+            image,
+
+            z,
+
+            x,
+            y,
+
+            imageWidth,
+            imageHeight,
+
+            alpha,
+
+            rotation
+
+        };
+
+    }
+
+
+    // =================================================
+    // DRAW PRODUCT
+    // =================================================
+
+    function drawProduct(
+        data
+    ) {
+
+        ctx.save();
+
+
+        ctx.globalAlpha =
+            data.alpha;
+
+
+        ctx.translate(
+            data.x,
+            data.y
+        );
+
+
+        ctx.rotate(
+            data.rotation
+        );
+
+
+        /*
+            NIENTE blur canvas.
+
+            Era una delle parti
+            più pesanti dell'animazione.
+        */
+
+        ctx.filter =
+            'none';
+
+
+        /*
+            Ombra solo quando il prodotto
+            è abbastanza vicino.
+        */
+
+        const closeToCamera =
+
+            data.z <
+            2.2;
+
+
+        if (
+            closeToCamera
+        ) {
+
+            ctx.shadowColor =
+                'rgba(0,0,0,.16)';
+
+
+            ctx.shadowBlur =
+                10 *
+                dpr;
+
+
+            ctx.shadowOffsetY =
+                6 *
+                dpr;
+
+        }
+
+        else {
+
+            ctx.shadowColor =
+                'transparent';
+
+
+            ctx.shadowBlur =
+                0;
+
+
+            ctx.shadowOffsetY =
+                0;
+
+        }
+
+
+        ctx.drawImage(
+
+            data.image,
+
+            -data.imageWidth / 2,
+
+            -data.imageHeight / 2,
+
+            data.imageWidth,
+
+            data.imageHeight
+
+        );
+
+
+        ctx.restore();
+
+    }
+
+
+    // =================================================
+    // STATUS
+    // =================================================
+
+    let currentIndex =
+        -1;
+
+
+    function updateStatus(
+        travel
+    ) {
+
+        const index =
+
+            Math.max(
+
+                0,
+
+                Math.min(
+
+                    total - 1,
+
+                    Math.round(
+                        travel
+                    )
+
+                )
+
+            );
+
+
+        if (
+            index ===
+            currentIndex
+        ) {
+            return;
+        }
+
+
+        currentIndex =
+            index;
+
+
+        if (
+            nameElement
+        ) {
+
+            nameElement.textContent =
+
+                products[
+                    index
+                ]
+                .name
+                .toUpperCase();
+
+        }
+
+
+        if (
+            countElement
+        ) {
+
+            countElement.textContent =
+
+                `${
+                    String(
+                        index + 1
+                    )
+                    .padStart(
+                        2,
+                        '0'
+                    )
+                } / ${
+                    String(
+                        total
+                    )
+                    .padStart(
+                        2,
+                        '0'
+                    )
+                }`;
+
+        }
+
+    }
+
+
+    // =================================================
+    // VISIBILITY
+    //
+    // L'animazione viene completamente fermata
+    // quando la sezione è fuori schermo.
+    // =================================================
+
+    let isVisible =
+        false;
+
+
+    let animationRunning =
+        false;
+
+
+    const visibilityObserver =
+
+        new IntersectionObserver(
+
+            entries => {
+
+                const entry =
+                    entries[0];
+
+
+                isVisible =
+                    entry.isIntersecting;
+
+
+                if (
+                    isVisible &&
+                    !animationRunning
+                ) {
+
+                    /*
+                        Ricalcoliamo subito
+                        la posizione dello scroll.
+                    */
+
+                    readScroll();
+
+
+                    animationRunning =
+                        true;
+
+
+                    requestAnimationFrame(
+                        frame
+                    );
+
+                }
+
+            },
+
+            {
+                rootMargin:
+                    '100px 0px'
+            }
+
+        );
+
+
+    visibilityObserver.observe(
+        track
+    );
+
+
+    // =================================================
+    // FRAME
+    // =================================================
+
+    function frame(
+        milliseconds
+    ) {
+
+        /*
+            Se siamo usciti dalla sezione,
+            interrompiamo completamente
+            requestAnimationFrame.
+        */
+
+        if (
+            !isVisible
+        ) {
+
+            animationRunning =
+                false;
+
+            return;
+
+        }
+
+
+        requestAnimationFrame(
+            frame
+        );
+
+
+        // =============================================
+        // SMOOTH SCROLL
+        // =============================================
+
+        smoothProgress +=
+
+            (
+                progress -
+                smoothProgress
+            )
+
+            *
+
+            SMOOTHING;
+
+
+        const time =
+
+            reduceMotion
+
+                ? 0
+
+                : milliseconds *
+                0.001;
+
+
+        // =============================================
+        // CAMERA TRAVEL
+        // =============================================
+
+        const travel =
+
+            -0.95 +
+
+            smoothProgress *
+
+            (
+                total -
+                1 +
+                1.90
+            );
+
+
+        updateStatus(
+            travel
+        );
+
+
+        // =============================================
+        // CLEAR
+        // =============================================
+
+        ctx.clearRect(
+
+            0,
+            0,
+
+            width,
+            height
+
+        );
+
+
+        // =============================================
+        // TUNNEL
+        // =============================================
+
+        drawTunnel(
+            travel
+        );
+
+
+        // =============================================
+        // PRODUCTS
+        // =============================================
+
+        const renderList =
+            [];
+
+
+        for (
+            let i = 0;
+            i < total;
+            i++
+        ) {
+
+            const data =
+
+                getProductData(
+
+                    i,
+
+                    travel,
+
+                    time
+
+                );
+
+
+            if (
+                data
+            ) {
+
+                renderList.push(
+                    data
+                );
+
+            }
+
+        }
+
+
+        /*
+            Oggetti lontani prima,
+            oggetti vicini dopo.
+        */
+
+        renderList.sort(
+
+            (
+                a,
+                b
+            ) =>
+
+                b.z -
+                a.z
+
+        );
+
+
+        for (
+            const data
+            of renderList
+        ) {
+
+            drawProduct(
+                data
+            );
+
+        }
+
+    }
+
+})();
